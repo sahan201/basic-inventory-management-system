@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox
+        fx:controller="com.example.dummy_inventory.controller.CategoriesController"
+        xmlns:fx="http://javafx.com/fxml/1"
+        xmlns="http://javafx.com/javafx/17"
+        spacing="15"
+        style="-fx-background-color: #f5f5f5;"
+>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Label text="📂 Category Management" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <TextField
+                fx:id="searchField"
+                promptText="🔍 Search categories..."
+                prefWidth="250"
+                style="-fx-background-radius: 8; -fx-padding: 8;"
+        />
+        <Button
+                text="Search"
+                onAction="#handleSearch"
+                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
+        >
+            <font><Font name="System Bold" size="12"/></font>
+        </Button>
+    </HBox>
+
+    <!-- Main Content -->
+    <SplitPane dividerPositions="0.6" VBox.vgrow="ALWAYS">
+
+        <!-- LEFT: Table View -->
+        <VBox spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15;">
+            <Label text="Categories List" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+            <TableView fx:id="categoryTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="80"/>
+                    <TableColumn fx:id="colName" text="Category Name" prefWidth="200"/>
+                    <TableColumn fx:id="colDescription" text="Description" prefWidth="300"/>
+                </columns>
+            </TableView>
+
+            <!-- Table Actions -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button
+                        text="➕ New"
+                        onAction="#handleNew"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="12"/></font>
+                </Button>
+                <Button
+                        text="✏ Edit"
+                        onAction="#handleEdit"
+                        style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="12"/></font>
+                </Button>
+                <Button
+                        text="🗑 Delete"
+                        onAction="#handleDelete"
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="12"/></font>
+                </Button>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="totalLabel" text="Total: 0" style="-fx-font-weight: bold;"/>
+            </HBox>
+        </VBox>
+
+        <!-- RIGHT: Form Panel -->
+        <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;">
+            <Label text="Category Details" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+            <Separator/>
+
+            <!-- Form Fields -->
+            <VBox spacing="10">
+                <!-- Category Name -->
+                <VBox spacing="5">
+                    <Label text="Category Name:" style="-fx-font-weight: bold;"/>
+                    <TextField
+                            fx:id="nameField"
+                            promptText="Enter category name"
+                            style="-fx-background-radius: 5; -fx-padding: 8;"
+                    />
+                </VBox>
+
+                <!-- Description -->
+                <VBox spacing="5">
+                    <Label text="Description:" style="-fx-font-weight: bold;"/>
+                    <TextArea
+                            fx:id="descriptionField"
+                            promptText="Enter description"
+                            prefRowCount="5"
+                            wrapText="true"
+                            style="-fx-background-radius: 5;"
+                    />
+                </VBox>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Form Actions -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button
+                        fx:id="saveButton"
+                        text="💾 Save"
+                        onAction="#handleSave"
+                        prefWidth="120"
+                        style="-fx-background-color: #667eea; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="13"/></font>
+                </Button>
+                <Button
+                        text="🔄 Clear"
+                        onAction="#handleClear"
+                        prefWidth="120"
+                        style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="13"/></font>
+                </Button>
+            </HBox>
+
+            <!-- Status Label -->
+            <Label
+                    fx:id="statusLabel"
+                    text=""
+                    wrapText="true"
+                    style="-fx-text-fill: #27ae60; -fx-font-size: 12; -fx-font-weight: bold;"
+            />
+        </VBox>
+    </SplitPane>
+</VBox>

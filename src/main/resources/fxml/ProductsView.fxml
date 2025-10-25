@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox
+        fx:controller="com.example.dummy_inventory.controller.ProductsController"
+        xmlns:fx="http://javafx.com/fxml/1"
+        xmlns="http://javafx.com/javafx/17"
+        spacing="15"
+        style="-fx-background-color: #f5f5f5;"
+>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Label text="📦 Product Management" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <TextField
+                fx:id="searchField"
+                promptText="🔍 Search products..."
+                prefWidth="250"
+                style="-fx-background-radius: 8; -fx-padding: 8;"
+        />
+        <Button
+                text="Search"
+                onAction="#handleSearch"
+                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
+        >
+            <font><Font name="System Bold" size="12"/></font>
+        </Button>
+        <Button
+                text="Show All"
+                onAction="#handleShowAll"
+                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
+        >
+            <font><Font name="System Bold" size="12"/></font>
+        </Button>
+    </HBox>
+
+    <!-- Main Content Split -->
+    <SplitPane dividerPositions="0.6" VBox.vgrow="ALWAYS">
+
+        <!-- LEFT: Table View -->
+        <VBox spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15;">
+            <Label text="Products List" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+            <TableView fx:id="productTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="colName" text="Product Name" prefWidth="200"/>
+                    <TableColumn fx:id="colCategory" text="Category" prefWidth="120"/>
+                    <TableColumn fx:id="colSupplier" text="Supplier" prefWidth="120"/>
+                    <TableColumn fx:id="colQuantity" text="Stock" prefWidth="80"/>
+                    <TableColumn fx:id="colPrice" text="Price" prefWidth="100"/>
+                </columns>
+            </TableView>
+
+            <!-- Table Actions -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button
+                        text="➕ New"
+                        onAction="#handleNew"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="12"/></font>
+                </Button>
+                <Button
+                        text="✏ Edit"
+                        onAction="#handleEdit"
+                        style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="12"/></font>
+                </Button>
+                <Button
+                        text="🗑 Delete"
+                        onAction="#handleDelete"
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="12"/></font>
+                </Button>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="totalLabel" text="Total Products: 0" style="-fx-font-weight: bold;"/>
+            </HBox>
+        </VBox>
+
+        <!-- RIGHT: Form Panel -->
+        <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;">
+            <Label text="Product Details" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+            <Separator/>
+
+            <!-- Form Fields -->
+            <VBox spacing="10">
+                <!-- Product ID (hidden/readonly) -->
+                <HBox alignment="CENTER_LEFT" spacing="10" managed="false" visible="false">
+                    <Label text="ID:" prefWidth="120" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="idField" editable="false" prefWidth="200"/>
+                </HBox>
+
+                <!-- Product Name -->
+                <VBox spacing="5">
+                    <Label text="Product Name:" style="-fx-font-weight: bold;"/>
+                    <TextField
+                            fx:id="nameField"
+                            promptText="Enter product name"
+                            style="-fx-background-radius: 5; -fx-padding: 8;"
+                    />
+                </VBox>
+
+                <!-- Category -->
+                <VBox spacing="5">
+                    <Label text="Category:" style="-fx-font-weight: bold;"/>
+                    <ComboBox
+                            fx:id="categoryComboBox"
+                            promptText="Select category"
+                            prefWidth="200"
+                            style="-fx-background-radius: 5;"
+                    />
+                </VBox>
+
+                <!-- Supplier -->
+                <VBox spacing="5">
+                    <Label text="Supplier:" style="-fx-font-weight: bold;"/>
+                    <ComboBox
+                            fx:id="supplierComboBox"
+                            promptText="Select supplier"
+                            prefWidth="200"
+                            style="-fx-background-radius: 5;"
+                    />
+                </VBox>
+
+                <!-- Quantity -->
+                <VBox spacing="5">
+                    <Label text="Quantity in Stock:" style="-fx-font-weight: bold;"/>
+                    <TextField
+                            fx:id="quantityField"
+                            promptText="Enter quantity"
+                            style="-fx-background-radius: 5; -fx-padding: 8;"
+                    />
+                </VBox>
+
+                <!-- Price -->
+                <VBox spacing="5">
+                    <Label text="Price ($):" style="-fx-font-weight: bold;"/>
+                    <TextField
+                            fx:id="priceField"
+                            promptText="Enter price"
+                            style="-fx-background-radius: 5; -fx-padding: 8;"
+                    />
+                </VBox>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Form Actions -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button
+                        fx:id="saveButton"
+                        text="💾 Save"
+                        onAction="#handleSave"
+                        prefWidth="120"
+                        style="-fx-background-color: #667eea; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="13"/></font>
+                </Button>
+                <Button
+                        text="🔄 Clear"
+                        onAction="#handleClear"
+                        prefWidth="120"
+                        style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="13"/></font>
+                </Button>
+            </HBox>
+
+            <!-- Status Label -->
+            <Label
+                    fx:id="statusLabel"
+                    text=""
+                    wrapText="true"
+                    style="-fx-text-fill: #27ae60; -fx-font-size: 12; -fx-font-weight: bold;"
+            />
+
+            <!-- Spacer -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Info Panel -->
+            <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
+                <Label text="💡 Tips:" style="-fx-font-weight: bold; -fx-font-size: 12;"/>
+                <Label text="• Select a product to edit" style="-fx-font-size: 11;"/>
+                <Label text="• All fields are required" style="-fx-font-size: 11;"/>
+                <Label text="• Double-click to quick edit" style="-fx-font-size: 11;"/>
+            </VBox>
+        </VBox>
+    </SplitPane>
+</VBox>
+
+        <!--
+        ============================================
+        PRODUCTS VIEW FEATURES
+        ============================================
+
+        ✅ Complete CRUD operations
+        ✅ Search functionality
+        ✅ TableView with all product info
+        ✅ Form for Add/Edit
+        ✅ Category & Supplier dropdowns
+        ✅ Delete confirmation
+        ✅ Input validation
+        ✅ Status messages
+        ✅ Professional styling
+
+        LAYOUT:
+        - Left: Table with action buttons
+        - Right: Form for add/edit
+        - Top: Search bar
+
+        TABLE COLUMNS:
+        - ID, Name, Category, Supplier, Stock, Price
+
+        FORM FIELDS:
+        - Name, Category, Supplier, Quantity, Price
+
+        ACTIONS:
+        - New: Clear form
+        - Edit: Load selected into form
+        - Delete: Remove product
+        - Save: Add or update
+        - Clear: Reset form
+        - Search: Filter products
+
+        ============================================
+        -->

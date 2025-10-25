@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox
+        fx:controller="com.example.dummy_inventory.controller.SalesController"
+        xmlns:fx="http://javafx.com/fxml/1"
+        xmlns="http://javafx.com/javafx/17"
+        spacing="15"
+        style="-fx-background-color: #f5f5f5;"
+>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Label text="💰 Sales Management" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label
+                fx:id="revenueLabel"
+                text="Total Revenue: $0.00"
+                style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #27ae60;"
+        />
+    </HBox>
+
+    <!-- Main Content -->
+    <SplitPane dividerPositions="0.65" VBox.vgrow="ALWAYS">
+
+        <!-- LEFT: Sales History Table -->
+        <VBox spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15;">
+            <Label text="Sales History" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+            <TableView fx:id="salesTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colId" text="Sale ID" prefWidth="70"/>
+                    <TableColumn fx:id="colProduct" text="Product" prefWidth="200"/>
+                    <TableColumn fx:id="colQuantity" text="Quantity" prefWidth="80"/>
+                    <TableColumn fx:id="colPrice" text="Unit Price" prefWidth="100"/>
+                    <TableColumn fx:id="colTotal" text="Total" prefWidth="100"/>
+                    <TableColumn fx:id="colDate" text="Date" prefWidth="150"/>
+                </columns>
+            </TableView>
+
+            <!-- Table Actions -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button
+                        text="🗑 Delete"
+                        onAction="#handleDelete"
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="12"/></font>
+                </Button>
+                <Button
+                        text="🔄 Refresh"
+                        onAction="#handleRefresh"
+                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
+                >
+                    <font><Font name="System Bold" size="12"/></font>
+                </Button>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="totalLabel" text="Total Sales: 0" style="-fx-font-weight: bold;"/>
+            </HBox>
+        </VBox>
+
+        <!-- RIGHT: Record New Sale Form -->
+        <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;">
+            <Label text="Record New Sale" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+            <Separator/>
+
+            <!-- Form Fields -->
+            <VBox spacing="10">
+                <!-- Select Product -->
+                <VBox spacing="5">
+                    <Label text="Select Product:" style="-fx-font-weight: bold;"/>
+                    <ComboBox
+                            fx:id="productComboBox"
+                            promptText="Choose product"
+                            prefWidth="250"
+                            style="-fx-background-radius: 5;"
+                    />
+                </VBox>
+
+                <!-- Available Stock -->
+                <VBox spacing="5">
+                    <Label text="Available Stock:" style="-fx-font-weight: bold;"/>
+                    <Label
+                            fx:id="stockLabel"
+                            text="-"
+                            style="-fx-font-size: 14; -fx-text-fill: #666666;"
+                    />
+                </VBox>
+
+                <!-- Quantity to Sell -->
+                <VBox spacing="5">
+                    <Label text="Quantity to Sell:" style="-fx-font-weight: bold;"/>
+                    <TextField
+                            fx:id="quantityField"
+                            promptText="Enter quantity"
+                            style="-fx-background-radius: 5; -fx-padding: 8;"
+                    />
+                </VBox>
+
+                <!-- Unit Price -->
+                <VBox spacing="5">
+                    <Label text="Unit Price:" style="-fx-font-weight: bold;"/>
+                    <Label
+                            fx:id="priceLabel"
+                            text="&#36;0.00"
+                            style="-fx-font-size: 14; -fx-text-fill: #666666;"
+                    />
+                </VBox>
+
+                <!-- Total Amount -->
+                <VBox spacing="5">
+                    <Label text="Total Amount:" style="-fx-font-weight: bold;"/>
+                    <Label
+                            fx:id="totalAmountLabel"
+                            text="&#36;0.00"
+                            style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #27ae60;"
+                    />
+                </VBox>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Record Sale Button -->
+            <Button
+                    text="💰 Record Sale"
+                    onAction="#handleRecordSale"
+                    prefWidth="250"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 12 20; -fx-cursor: hand;"
+            >
+                <font><Font name="System Bold" size="14"/></font>
+            </Button>
+
+            <!-- Status Label -->
+            <Label
+                    fx:id="statusLabel"
+                    text=""
+                    wrapText="true"
+                    style="-fx-text-fill: #27ae60; -fx-font-size: 12; -fx-font-weight: bold;"
+            />
+
+            <!-- Spacer -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Info Box -->
+            <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
+                <Label text="ℹ️ Note:" style="-fx-font-weight: bold; -fx-font-size: 12;"/>
+                <Label text="• Stock will be automatically updated" style="-fx-font-size: 11;"/>
+                <Label text="• Sale records are permanent" style="-fx-font-size: 11;"/>
+                <Label text="• Check stock before selling" style="-fx-font-size: 11;"/>
+                <Label text="• Transaction will rollback on error" style="-fx-font-size: 11;"/>
+            </VBox>
+        </VBox>
+    </SplitPane>
+</VBox>

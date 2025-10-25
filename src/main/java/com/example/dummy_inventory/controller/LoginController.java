@@ -160,8 +160,9 @@ public class LoginController {
     private void openDashboard() {
         try {
             // Load the dashboard FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/dummy_inventory/view/DashboardView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DashboardView.fxml"));
             Parent dashboardRoot = loader.load();
+            // C:\javaInventoryAssign\dummy_inventory\src\main\resources\fxml\CategoriesView.fxml
 
             // Optional: Pass current user to dashboard controller
             // DashboardController dashboardController = loader.getController();
