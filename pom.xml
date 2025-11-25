@@ -140,11 +140,6 @@
             <artifactId>opencsv</artifactId>
             <version>5.9</version>
         </dependency>
-        <dependency>
-    <groupId>com.opencsv</groupId>
-    <artifactId>opencsv</artifactId>
-    <version>5.9</version>
-</dependency>
     </dependencies>
 
     <build>
@@ -156,6 +151,10 @@
                 <configuration>
                     <source>9</source>
                     <target>9</target>
+                    <compilerArgs>
+                        <arg>--add-reads</arg>
+                        <arg>com.example.dummy_inventory=ALL-UNNAMED</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
