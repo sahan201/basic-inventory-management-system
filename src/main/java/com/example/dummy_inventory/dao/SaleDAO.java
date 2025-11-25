@@ -19,6 +19,7 @@ public class SaleDAO {
             conn = DatabaseConnection.getConnection();
             conn.setAutoCommit(false);
 
+            // Fetch product to get current price and check stock
             Product product = productDAO.getProductById(sale.getProductId());
             if (product == null) {
                 System.err.println("Product not found");
@@ -26,20 +27,56 @@ public class SaleDAO {
                 return false;
             }
 
+            // Check stock availability
             if (product.getQuantityInStock() < sale.getQuantitySold()) {
                 System.err.println("Insufficient stock. Available: " + product.getQuantityInStock());
                 conn.rollback();
                 return false;
             }
 
-            String insertSql = "INSERT INTO Sale (product_id, quantity_sold, sale_date) VALUES (?, ?, ?)";
+            // Set unit price from product if not already set
+            if (sale.getUnitPrice() == 0) {
+                sale.setUnitPrice(product.getPrice());
+            }
+
+            // Calculate total amount
+            double totalAmount = sale.getQuantitySold() * sale.getUnitPrice();
+            sale.setTotalAmount(totalAmount);
+
+            // Insert sale with all required fields
+            String insertSql = "INSERT INTO Sale (product_id, quantity_sold, unit_price, total_amount, sale_date, user_id, payment_method, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
                 pstmt.setInt(1, sale.getProductId());
                 pstmt.setInt(2, sale.getQuantitySold());
-                pstmt.setTimestamp(3, Timestamp.valueOf(sale.getSaleDate()));
+                pstmt.setDouble(3, sale.getUnitPrice());
+                pstmt.setDouble(4, sale.getTotalAmount());
+                pstmt.setTimestamp(5, Timestamp.valueOf(sale.getSaleDate()));
+
+                // Handle nullable user_id
+                if (sale.getUserId() != null) {
+                    pstmt.setInt(6, sale.getUserId());
+                } else {
+                    pstmt.setNull(6, java.sql.Types.INTEGER);
+                }
+
+                // Handle payment method
+                if (sale.getPaymentMethod() != null) {
+                    pstmt.setString(7, sale.getPaymentMethod().name());
+                } else {
+                    pstmt.setString(7, Sale.PaymentMethod.CASH.name());
+                }
+
+                // Handle nullable notes
+                if (sale.getNotes() != null) {
+                    pstmt.setString(8, sale.getNotes());
+                } else {
+                    pstmt.setNull(8, java.sql.Types.VARCHAR);
+                }
+
                 pstmt.executeUpdate();
             }
 
+            // Update product stock
             String updateSql = "UPDATE Product SET quantity_in_stock = quantity_in_stock - ? WHERE product_id = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
                 pstmt.setInt(1, sale.getQuantitySold());
@@ -66,6 +103,7 @@ public class SaleDAO {
             if (conn != null) {
                 try {
                     conn.setAutoCommit(true);
+                    conn.close(); // Properly close the connection
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -75,7 +113,8 @@ public class SaleDAO {
 
     public List<Sale> getAllSales() {
         List<Sale> sales = new ArrayList<>();
-        String sql = "SELECT s.sale_id, s.product_id, s.quantity_sold, s.sale_date, " +
+        String sql = "SELECT s.sale_id, s.product_id, s.quantity_sold, s.unit_price, s.total_amount, " +
+                "s.sale_date, s.user_id, s.payment_method, s.notes, " +
                 "p.name AS product_name, p.price " +
                 "FROM Sale s " +
                 "JOIN Product p ON s.product_id = p.product_id " +
@@ -90,7 +129,13 @@ public class SaleDAO {
                         rs.getInt("sale_id"),
                         rs.getInt("product_id"),
                         rs.getInt("quantity_sold"),
-                        rs.getTimestamp("sale_date").toLocalDateTime()
+                        rs.getDouble("unit_price"),
+                        rs.getDouble("total_amount"),
+                        rs.getTimestamp("sale_date").toLocalDateTime(),
+                        (Integer) rs.getObject("user_id"),
+                        rs.getString("payment_method") != null ?
+                                Sale.PaymentMethod.valueOf(rs.getString("payment_method")) : Sale.PaymentMethod.CASH,
+                        rs.getString("notes")
                 );
                 sale.setProductName(rs.getString("product_name"));
                 sale.setProductPrice(rs.getDouble("price"));
@@ -105,7 +150,8 @@ public class SaleDAO {
     }
 
     public Sale getSaleById(int saleId) {
-        String sql = "SELECT s.sale_id, s.product_id, s.quantity_sold, s.sale_date, " +
+        String sql = "SELECT s.sale_id, s.product_id, s.quantity_sold, s.unit_price, s.total_amount, " +
+                "s.sale_date, s.user_id, s.payment_method, s.notes, " +
                 "p.name AS product_name, p.price " +
                 "FROM Sale s " +
                 "JOIN Product p ON s.product_id = p.product_id " +
@@ -122,7 +168,13 @@ public class SaleDAO {
                             rs.getInt("sale_id"),
                             rs.getInt("product_id"),
                             rs.getInt("quantity_sold"),
-                            rs.getTimestamp("sale_date").toLocalDateTime()
+                            rs.getDouble("unit_price"),
+                            rs.getDouble("total_amount"),
+                            rs.getTimestamp("sale_date").toLocalDateTime(),
+                            (Integer) rs.getObject("user_id"),
+                            rs.getString("payment_method") != null ?
+                                    Sale.PaymentMethod.valueOf(rs.getString("payment_method")) : Sale.PaymentMethod.CASH,
+                            rs.getString("notes")
                     );
                     sale.setProductName(rs.getString("product_name"));
                     sale.setProductPrice(rs.getDouble("price"));
@@ -197,6 +249,7 @@ public class SaleDAO {
             if (conn != null) {
                 try {
                     conn.setAutoCommit(true);
+                    conn.close(); // Properly close the connection
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -206,7 +259,8 @@ public class SaleDAO {
 
     public List<Sale> getSalesByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         List<Sale> sales = new ArrayList<>();
-        String sql = "SELECT s.sale_id, s.product_id, s.quantity_sold, s.sale_date, " +
+        String sql = "SELECT s.sale_id, s.product_id, s.quantity_sold, s.unit_price, s.total_amount, " +
+                "s.sale_date, s.user_id, s.payment_method, s.notes, " +
                 "p.name AS product_name, p.price " +
                 "FROM Sale s " +
                 "JOIN Product p ON s.product_id = p.product_id " +
@@ -225,7 +279,13 @@ public class SaleDAO {
                             rs.getInt("sale_id"),
                             rs.getInt("product_id"),
                             rs.getInt("quantity_sold"),
-                            rs.getTimestamp("sale_date").toLocalDateTime()
+                            rs.getDouble("unit_price"),
+                            rs.getDouble("total_amount"),
+                            rs.getTimestamp("sale_date").toLocalDateTime(),
+                            (Integer) rs.getObject("user_id"),
+                            rs.getString("payment_method") != null ?
+                                    Sale.PaymentMethod.valueOf(rs.getString("payment_method")) : Sale.PaymentMethod.CASH,
+                            rs.getString("notes")
                     );
                     sale.setProductName(rs.getString("product_name"));
                     sale.setProductPrice(rs.getDouble("price"));
@@ -241,9 +301,9 @@ public class SaleDAO {
     }
 
     public double getTotalRevenue() {
-        String sql = "SELECT SUM(s.quantity_sold * p.price) AS total_revenue " +
-                "FROM Sale s " +
-                "JOIN Product p ON s.product_id = p.product_id";
+        // Use total_amount from Sale table for accurate revenue calculation
+        // This accounts for the actual price at time of sale, not current product price
+        String sql = "SELECT SUM(total_amount) AS total_revenue FROM Sale";
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
