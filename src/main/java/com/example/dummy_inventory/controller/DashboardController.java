@@ -269,11 +269,11 @@ public class DashboardController {
 
             // Load login view
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/dummy_inventory/view/LoginView.fxml")
+                    getClass().getResource("/fxml/LoginView.fxml")
             );
             Parent loginRoot = loader.load();
 
-            // Get current stage and switch to login scene
+            // Get current stage and switch to log in scene
             Stage stage = (Stage) logoutButton.getScene().getWindow();
             Scene loginScene = new Scene(loginRoot);
             stage.setScene(loginScene);
