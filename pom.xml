@@ -140,6 +140,29 @@
             <artifactId>opencsv</artifactId>
             <version>5.9</version>
         </dependency>
+        <!-- Apache Commons for POI (transitive, but explicit for stability) -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.26.0</version>
+        </dependency>
+        <!-- XML Beans for POI OOXML -->
+        <dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+            <artifactId>xmlbeans</artifactId>
+            <version>5.2.0</version>
+        </dependency>
+        <!-- Apache Commons Text (useful for CSV escaping) -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.11.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -151,6 +174,10 @@
                 <configuration>
                     <source>9</source>
                     <target>9</target>
+                    <compilerArgs>
+                        <arg>--add-reads</arg>
+                        <arg>com.example.dummy_inventory=ALL-UNNAMED</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

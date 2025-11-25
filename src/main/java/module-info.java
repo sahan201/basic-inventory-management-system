@@ -1,4 +1,4 @@
-module com.example.dummy_inventory {
+open module com.example.dummy_inventory {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -13,9 +13,8 @@ module com.example.dummy_inventory {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
-    opens com.example.dummy_inventory.controller to javafx.fxml;
-
-    opens com.example.dummy_inventory to javafx.fxml;
+    // Allow access to unnamed modules (jbcrypt, opencsv, apache poi)
+    requires ALL-UNNAMED;
 
     exports com.example.dummy_inventory;
 }
