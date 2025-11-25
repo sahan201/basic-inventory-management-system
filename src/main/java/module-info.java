@@ -12,6 +12,7 @@ module com.example.dummy_inventory {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires com.opencsv;
 
     opens com.example.dummy_inventory.controller to javafx.fxml;
 
