@@ -138,18 +138,69 @@ public class SaleDAO {
     }
 
     public boolean deleteSale(int saleId) {
-        String sql = "DELETE FROM Sale WHERE sale_id = ?";
+        Connection conn = null;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            conn = DatabaseConnection.getConnection();
+            conn.setAutoCommit(false);
 
-            pstmt.setInt(1, saleId);
-            return pstmt.executeUpdate() > 0;
+            // First, get the sale details to restore stock
+            String getSaleSql = "SELECT product_id, quantity_sold FROM Sale WHERE sale_id = ?";
+            int productId = 0;
+            int quantitySold = 0;
+
+            try (PreparedStatement pstmt = conn.prepareStatement(getSaleSql)) {
+                pstmt.setInt(1, saleId);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        productId = rs.getInt("product_id");
+                        quantitySold = rs.getInt("quantity_sold");
+                    } else {
+                        // Sale not found
+                        conn.rollback();
+                        return false;
+                    }
+                }
+            }
+
+            // Restore stock to product
+            String updateStockSql = "UPDATE Product SET quantity_in_stock = quantity_in_stock + ? WHERE product_id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(updateStockSql)) {
+                pstmt.setInt(1, quantitySold);
+                pstmt.setInt(2, productId);
+                pstmt.executeUpdate();
+            }
+
+            // Delete the sale
+            String deleteSql = "DELETE FROM Sale WHERE sale_id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(deleteSql)) {
+                pstmt.setInt(1, saleId);
+                pstmt.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Error deleting sale:");
             e.printStackTrace();
+
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
             return false;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
