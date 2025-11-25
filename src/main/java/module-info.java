@@ -15,7 +15,11 @@ open module com.example.dummy_inventory {
     requires com.opencsv;
 
     // Allow access to unnamed modules (jbcrypt, opencsv, apache poi)
-    requires ALL-UNNAMED;
+    requires jbcrypt;
+
+    requires org.apache.poi.poi;
+
+    requires org.apache.poi.ooxml;
 
     exports com.example.dummy_inventory;
 }
