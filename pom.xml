@@ -151,6 +151,10 @@
                 <configuration>
                     <source>9</source>
                     <target>9</target>
+                    <compilerArgs>
+                        <arg>--add-reads</arg>
+                        <arg>com.example.dummy_inventory=ALL-UNNAMED</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
