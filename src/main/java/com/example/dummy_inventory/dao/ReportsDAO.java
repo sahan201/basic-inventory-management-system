@@ -279,8 +279,8 @@ public class ReportsDAO {
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setDate(1, Date.valueOf(date));
+
+            pstmt.setDate(1, java.sql.Date.valueOf(date));
             
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
