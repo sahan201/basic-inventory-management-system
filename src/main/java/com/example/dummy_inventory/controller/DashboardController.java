@@ -244,7 +244,7 @@ public class DashboardController {
 
             /* Uncomment this when views are created:
             FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/com/example/dummy_inventory/view/" + fxmlFile)
+                getClass().getResource("/fxml/" + fxmlFile)
             );
             Parent view = loader.load();
             contentArea.getChildren().clear();
