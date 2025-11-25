@@ -1,6 +1,6 @@
 package com.example.dummy_inventory.controller;
 
-import com.example.dummy_inventory.db.DatabaseConnection;
+import com.example.dummy_inventory.dao.UserDAO;
 import com.example.dummy_inventory.model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,10 +15,6 @@ import javafx.stage.Stage;
 import javafx.application.Platform;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * Controller for the Login View
@@ -115,43 +111,27 @@ public class LoginController {
     }
 
     /**
-     * Validates login credentials against the database
+     * Validates login credentials against the database using BCrypt password hashing
      *
      * @param username The username to check
      * @param password The password to check
      * @return User object if valid, null otherwise
      */
     private User validateLogin(String username, String password) {
-        String sql = "SELECT user_id, username, password FROM User WHERE username = ? AND password = ?";
+        UserDAO userDAO = new UserDAO();
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            // Set parameters (prevents SQL injection)
-            pstmt.setString(1, username);
-            pstmt.setString(2, password); // TODO: Hash password in production
-
-            // Execute query
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    // User found - create User object
-                    return new User(
-                            rs.getInt("user_id"),
-                            rs.getString("username"),
-                            rs.getString("password")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Database error during login validation:");
+        try {
+            // Use UserDAO.login() which handles BCrypt verification
+            return userDAO.login(username, password);
+        } catch (Exception e) {
+            System.err.println("Error during login validation:");
             e.printStackTrace();
 
             Platform.runLater(() ->
                     setStatusMessage("⚠ Database connection error.", Color.web("#e74c3c"))
             );
+            return null;
         }
-
-        return null;
     }
 
     /**
