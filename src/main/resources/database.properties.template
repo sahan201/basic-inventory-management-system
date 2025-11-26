@@ -1,0 +1,24 @@
+# Database Configuration Template
+# Copy this file to database.properties and update with your actual credentials
+# IMPORTANT: database.properties is in .gitignore and should NEVER be committed
+
+# Database connection URL
+db.url=jdbc:mysql://localhost:3306/inventory_management
+
+# Database credentials
+db.user=root
+db.password=YOUR_PASSWORD_HERE
+
+# Connection parameters (optional, can be left as-is)
+db.connection.params=?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+
+# Connection Pool Settings (optional, for future use)
+db.pool.maxConnections=10
+db.pool.timeout=30000
+
+# Setup Instructions:
+# 1. Copy this file to database.properties in the same directory
+# 2. Update db.user and db.password with your MySQL credentials
+# 3. Ensure your MySQL server is running
+# 4. Create the database: CREATE DATABASE inventory_management;
+# 5. Run the database_schema.sql script to create tables
