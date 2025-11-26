@@ -397,34 +397,67 @@ public class ProductsController {
     private boolean validateInput() {
         StringBuilder errors = new StringBuilder();
 
-        if (nameField.getText().trim().isEmpty()) {
+        // Validate product name
+        String productName = nameField.getText().trim();
+        if (productName.isEmpty()) {
             errors.append("• Product name is required\n");
+        } else if (productName.length() < 2) {
+            errors.append("• Product name must be at least 2 characters\n");
+        } else if (productName.length() > 200) {
+            errors.append("• Product name must not exceed 200 characters\n");
         }
 
+        // Validate category selection
         if (categoryComboBox.getValue() == null) {
             errors.append("• Please select a category\n");
         }
 
+        // Validate supplier selection
         if (supplierComboBox.getValue() == null) {
             errors.append("• Please select a supplier\n");
         }
 
+        // Validate quantity
         try {
-            int quantity = Integer.parseInt(quantityField.getText().trim());
-            if (quantity < 0) {
-                errors.append("• Quantity cannot be negative\n");
+            String quantityText = quantityField.getText().trim();
+            if (quantityText.isEmpty()) {
+                errors.append("• Quantity is required\n");
+            } else {
+                int quantity = Integer.parseInt(quantityText);
+                if (quantity < 0) {
+                    errors.append("• Quantity cannot be negative\n");
+                } else if (quantity > 1000000) {
+                    errors.append("• Quantity must not exceed 1,000,000\n");
+                }
             }
         } catch (NumberFormatException e) {
-            errors.append("• Quantity must be a valid number\n");
+            errors.append("• Quantity must be a valid whole number\n");
         }
 
+        // Validate price
         try {
-            double price = Double.parseDouble(priceField.getText().trim());
-            if (price < 0) {
-                errors.append("• Price cannot be negative\n");
+            String priceText = priceField.getText().trim();
+            if (priceText.isEmpty()) {
+                errors.append("• Price is required\n");
+            } else {
+                double price = Double.parseDouble(priceText);
+                if (price < 0) {
+                    errors.append("• Price cannot be negative\n");
+                } else if (price > 1000000) {
+                    errors.append("• Price must not exceed $1,000,000\n");
+                } else if (price > 0 && price < 0.01) {
+                    errors.append("• Price must be at least $0.01\n");
+                }
+
+                // Check decimal precision (max 2 decimal places)
+                String priceStr = String.format("%.2f", price);
+                if (!priceStr.equals(String.format("%.2f", Double.parseDouble(priceText)))) {
+                    // This is just a warning, not an error
+                    // The price will be rounded to 2 decimal places
+                }
             }
         } catch (NumberFormatException e) {
-            errors.append("• Price must be a valid number\n");
+            errors.append("• Price must be a valid number (e.g., 19.99)\n");
         }
 
         if (errors.length() > 0) {

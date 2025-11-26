@@ -196,20 +196,41 @@ public class SuppliersController {
         statusLabel.setText("");
     }
 
+    private static final java.util.regex.Pattern EMAIL_PATTERN = java.util.regex.Pattern.compile(
+        "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+    );
+
     private boolean validateInput() {
         StringBuilder errors = new StringBuilder();
 
-        if (nameField.getText().trim().isEmpty()) {
+        // Validate supplier name
+        String supplierName = nameField.getText().trim();
+        if (supplierName.isEmpty()) {
             errors.append("• Supplier name is required\n");
+        } else if (supplierName.length() < 2) {
+            errors.append("• Supplier name must be at least 2 characters\n");
+        } else if (supplierName.length() > 200) {
+            errors.append("• Supplier name must not exceed 200 characters\n");
         }
 
-        if (contactField.getText().trim().isEmpty()) {
+        // Validate contact person
+        String contactPerson = contactField.getText().trim();
+        if (contactPerson.isEmpty()) {
             errors.append("• Contact person is required\n");
+        } else if (contactPerson.length() < 2) {
+            errors.append("• Contact person must be at least 2 characters\n");
+        } else if (contactPerson.length() > 100) {
+            errors.append("• Contact person must not exceed 100 characters\n");
         }
 
+        // Validate email (improved regex)
         String email = emailField.getText().trim();
-        if (!email.isEmpty() && !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            errors.append("• Invalid email format\n");
+        if (!email.isEmpty()) {
+            if (!EMAIL_PATTERN.matcher(email).matches()) {
+                errors.append("• Invalid email format (example: supplier@company.com)\n");
+            } else if (email.length() > 100) {
+                errors.append("• Email must not exceed 100 characters\n");
+            }
         }
 
         if (errors.length() > 0) {

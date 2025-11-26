@@ -2,6 +2,7 @@ package com.example.dummy_inventory.controller;
 
 import com.example.dummy_inventory.dao.UserDAO;
 import com.example.dummy_inventory.model.User;
+import com.example.dummy_inventory.util.PasswordValidator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.scene.paint.Color;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class UserManagementController {
 
@@ -203,16 +205,25 @@ public class UserManagementController {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Reset Password");
         dialog.setHeaderText("Reset password for: " + user.getUsername());
-        dialog.setContentText("New password:");
+        dialog.setContentText("New password (min 8 chars, 1 uppercase, 1 number):");
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(password -> {
             if (!password.isEmpty()) {
+                // Validate password strength
+                PasswordValidator.ValidationResult validationResult = PasswordValidator.validatePassword(password);
+                if (!validationResult.isValid()) {
+                    showError("Password validation failed:\n" + validationResult.getErrorMessage());
+                    return;
+                }
+
                 if (userDAO.updatePassword(user.getUserId(), password)) {
                     showSuccess("Password reset successfully!");
                 } else {
                     showError("Failed to reset password.");
                 }
+            } else {
+                showError("Password cannot be empty.");
             }
         });
     }
@@ -234,19 +245,75 @@ public class UserManagementController {
         statusLabel.setText("");
     }
 
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+        "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+    );
+
+    private static final Pattern USERNAME_PATTERN = Pattern.compile(
+        "^[a-zA-Z0-9_]{3,20}$"
+    );
+
     private boolean validateInput() {
-        if (usernameField.getText().trim().isEmpty()) {
-            showError("Username is required.");
-            return false;
+        StringBuilder errors = new StringBuilder();
+
+        // Validate username
+        String username = usernameField.getText().trim();
+        if (username.isEmpty()) {
+            errors.append("• Username is required\n");
+        } else if (!USERNAME_PATTERN.matcher(username).matches()) {
+            errors.append("• Username must be 3-20 characters (letters, numbers, underscore only)\n");
         }
-        if (selectedUser == null && passwordField.getText().isEmpty()) {
-            showError("Password is required for new users.");
-            return false;
+
+        // Validate password (for new users or when changing password)
+        String password = passwordField.getText();
+        if (selectedUser == null) {
+            // New user - password is required
+            if (password.isEmpty()) {
+                errors.append("• Password is required for new users\n");
+            } else {
+                // Validate password strength
+                PasswordValidator.ValidationResult passwordResult = PasswordValidator.validatePassword(password);
+                if (!passwordResult.isValid()) {
+                    for (String error : passwordResult.getErrors()) {
+                        errors.append("• ").append(error).append("\n");
+                    }
+                }
+            }
+        } else {
+            // Editing existing user - only validate if password is provided
+            if (!password.isEmpty()) {
+                PasswordValidator.ValidationResult passwordResult = PasswordValidator.validatePassword(password);
+                if (!passwordResult.isValid()) {
+                    for (String error : passwordResult.getErrors()) {
+                        errors.append("• ").append(error).append("\n");
+                    }
+                }
+            }
         }
+
+        // Validate full name (optional but should not be too long)
+        String fullName = fullNameField.getText().trim();
+        if (!fullName.isEmpty() && fullName.length() > 100) {
+            errors.append("• Full name must not exceed 100 characters\n");
+        }
+
+        // Validate email (if provided)
+        String email = emailField.getText().trim();
+        if (!email.isEmpty() && !EMAIL_PATTERN.matcher(email).matches()) {
+            errors.append("• Invalid email format\n");
+        }
+
+        // Validate role
         if (roleComboBox.getValue() == null) {
-            showError("Please select a role.");
+            errors.append("• Please select a role\n");
+        }
+
+        // Show errors if any
+        if (errors.length() > 0) {
+            showError("Validation Errors:\n" + errors.toString());
             return false;
         }
+
         return true;
     }
 
