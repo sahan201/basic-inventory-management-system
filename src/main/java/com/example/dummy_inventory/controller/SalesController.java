@@ -238,6 +238,8 @@ public class SalesController {
             int quantity = Integer.parseInt(quantityField.getText().trim());
             if (quantity <= 0) {
                 errors.append("• Quantity must be greater than 0\n");
+            } else if (quantity > 100000) {
+                errors.append("• Quantity cannot exceed 100,000 (check for data entry errors)\n");
             }
         } catch (NumberFormatException e) {
             errors.append("• Please enter a valid quantity\n");

@@ -52,6 +52,14 @@
             <!-- Navigation Menu -->
             <HBox spacing="0" style="-fx-background-color: #5568d3; -fx-padding: 0;">
                 <Button
+                        fx:id="btnDashboard"
+                        text="📊 Dashboard"
+                        onAction="#showDashboard"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: #ffffff;"
+                >
+                    <font><Font name="System Bold" size="13"/></font>
+                </Button>
+                <Button
                         fx:id="btnProducts"
                         text="📦 Products"
                         onAction="#showProducts"
@@ -85,10 +93,18 @@
                     <font><Font name="System Bold" size="13"/></font>
                 </Button>
                 <Button
-                        fx:id="btnDashboard"
-                        text="📊 Dashboard"
-                        onAction="#showDashboard"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: #ffffff;"
+                        fx:id="btnUsers"
+                        text="👥 Users"
+                        onAction="#showUsers"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;"
+                >
+                    <font><Font name="System Bold" size="13"/></font>
+                </Button>
+                <Button
+                        fx:id="btnReports"
+                        text="📈 Reports"
+                        onAction="#showReports"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;"
                 >
                     <font><Font name="System Bold" size="13"/></font>
                 </Button>

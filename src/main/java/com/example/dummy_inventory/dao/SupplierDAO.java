@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SupplierDAO {
     public boolean createSupplier(Supplier supplier) {
-        String sql = "INSERT INTO Supplier (name, contact_person, email) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Supplier (name, contact_person, email, phone) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -16,6 +16,7 @@ public class SupplierDAO {
             pstmt.setString(1, supplier.getName());
             pstmt.setString(2, supplier.getContactPerson());
             pstmt.setString(3, supplier.getEmail());
+            pstmt.setString(4, supplier.getPhone());
 
             return pstmt.executeUpdate() > 0;
 
@@ -28,7 +29,7 @@ public class SupplierDAO {
 
     public List<Supplier> getAllSuppliers() {
         List<Supplier> suppliers = new ArrayList<>();
-        String sql = "SELECT supplier_id, name, contact_person, email FROM Supplier";
+        String sql = "SELECT supplier_id, name, contact_person, email, phone FROM Supplier";
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -39,7 +40,8 @@ public class SupplierDAO {
                         rs.getInt("supplier_id"),
                         rs.getString("name"),
                         rs.getString("contact_person"),
-                        rs.getString("email")
+                        rs.getString("email"),
+                        rs.getString("phone")
                 ));
             }
         } catch (SQLException e) {
@@ -51,7 +53,7 @@ public class SupplierDAO {
     }
 
     public Supplier getSupplierById(int supplierId) {
-        String sql = "SELECT supplier_id, name, contact_person, email FROM Supplier WHERE supplier_id = ?";
+        String sql = "SELECT supplier_id, name, contact_person, email, phone FROM Supplier WHERE supplier_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -64,7 +66,8 @@ public class SupplierDAO {
                             rs.getInt("supplier_id"),
                             rs.getString("name"),
                             rs.getString("contact_person"),
-                            rs.getString("email")
+                            rs.getString("email"),
+                            rs.getString("phone")
                     );
                 }
             }
@@ -77,7 +80,7 @@ public class SupplierDAO {
     }
 
     public boolean updateSupplier(Supplier supplier) {
-        String sql = "UPDATE Supplier SET name = ?, contact_person = ?, email = ? WHERE supplier_id = ?";
+        String sql = "UPDATE Supplier SET name = ?, contact_person = ?, email = ?, phone = ? WHERE supplier_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -85,7 +88,8 @@ public class SupplierDAO {
             pstmt.setString(1, supplier.getName());
             pstmt.setString(2, supplier.getContactPerson());
             pstmt.setString(3, supplier.getEmail());
-            pstmt.setInt(4, supplier.getSupplierId());
+            pstmt.setString(4, supplier.getPhone());
+            pstmt.setInt(5, supplier.getSupplierId());
 
             return pstmt.executeUpdate() > 0;
 
@@ -114,7 +118,7 @@ public class SupplierDAO {
 
     public List<Supplier> searchSuppliers(String searchTerm) {
         List<Supplier> suppliers = new ArrayList<>();
-        String sql = "SELECT supplier_id, name, contact_person, email FROM Supplier WHERE name LIKE ? OR contact_person LIKE ?";
+        String sql = "SELECT supplier_id, name, contact_person, email, phone FROM Supplier WHERE name LIKE ? OR contact_person LIKE ? OR phone LIKE ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -122,6 +126,7 @@ public class SupplierDAO {
             String search = "%" + searchTerm + "%";
             pstmt.setString(1, search);
             pstmt.setString(2, search);
+            pstmt.setString(3, search);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
@@ -129,7 +134,8 @@ public class SupplierDAO {
                             rs.getInt("supplier_id"),
                             rs.getString("name"),
                             rs.getString("contact_person"),
-                            rs.getString("email")
+                            rs.getString("email"),
+                            rs.getString("phone")
                     ));
                 }
             }
