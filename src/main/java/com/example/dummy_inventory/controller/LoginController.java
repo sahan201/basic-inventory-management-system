@@ -35,6 +35,9 @@ public class LoginController {
     @FXML
     private Label statusLabel;
 
+    @FXML
+    private javafx.scene.control.Hyperlink registerLink;
+
     // Store logged-in user info
     private static User currentUser;
 
@@ -195,6 +198,33 @@ public class LoginController {
     private void setStatusMessage(String message, Color color) {
         statusLabel.setText(message);
         statusLabel.setTextFill(color);
+    }
+
+    /**
+     * Navigate to registration page
+     */
+    @FXML
+    protected void handleRegister() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/RegisterView.fxml")
+            );
+            Parent registerRoot = loader.load();
+
+            // Get current stage and switch scene
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            Scene registerScene = new Scene(registerRoot);
+            stage.setScene(registerScene);
+            stage.setTitle("Inventory Management - Register");
+            stage.centerOnScreen();
+
+            System.out.println("Navigated to registration page");
+
+        } catch (IOException e) {
+            System.err.println("Error loading registration view:");
+            e.printStackTrace();
+            setStatusMessage("⚠ Error loading registration page.", Color.web("#e74c3c"));
+        }
     }
 
     /**
