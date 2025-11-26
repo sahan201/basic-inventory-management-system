@@ -48,6 +48,12 @@ public class DashboardController {
     @FXML
     private Button btnDashboard;
 
+    @FXML
+    private Button btnUsers;
+
+    @FXML
+    private Button btnReports;
+
     // Content area
     @FXML
     private StackPane contentArea;
@@ -214,6 +220,26 @@ public class DashboardController {
     }
 
     /**
+     * Shows the user management view
+     */
+    @FXML
+    private void showUsers() {
+        loadView("UserManagementView.fxml", "User Management");
+        setActiveTab(btnUsers);
+        setStatus("User Management view");
+    }
+
+    /**
+     * Shows the reports view
+     */
+    @FXML
+    private void showReports() {
+        loadView("ReportsView.fxml", "Reports");
+        setActiveTab(btnReports);
+        setStatus("Reports view");
+    }
+
+    /**
      * Loads a view into the content area
      *
      * @param fxmlFile The FXML file name
@@ -221,40 +247,38 @@ public class DashboardController {
      */
     private void loadView(String fxmlFile, String viewName) {
         try {
-            // For now, show a placeholder since we haven't created these views yet
-            VBox placeholder = new VBox(20);
-            placeholder.setAlignment(javafx.geometry.Pos.CENTER);
-            placeholder.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 50;");
-
-            Label titleLabel = new Label("🚧 " + viewName);
-            titleLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #667eea;");
-
-            Label messageLabel = new Label("This view is under construction.\nIt will be implemented in the next phase.");
-            messageLabel.setStyle("-fx-font-size: 14; -fx-text-fill: #666666; -fx-text-alignment: center;");
-            messageLabel.setWrapText(true);
-
-            Button backButton = new Button("← Back to Dashboard");
-            backButton.setStyle("-fx-background-color: #667eea; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;");
-            backButton.setOnAction(e -> showDashboard());
-
-            placeholder.getChildren().addAll(titleLabel, messageLabel, backButton);
-
-            contentArea.getChildren().clear();
-            contentArea.getChildren().add(placeholder);
-
-            /* Uncomment this when views are created:
             FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/fxml/" + fxmlFile)
             );
             Parent view = loader.load();
             contentArea.getChildren().clear();
             contentArea.getChildren().add(view);
-            */
 
         } catch (Exception e) {
             System.err.println("Error loading " + viewName + ":");
             e.printStackTrace();
             setStatus("Error loading " + viewName);
+
+            // Show error placeholder
+            VBox placeholder = new VBox(20);
+            placeholder.setAlignment(javafx.geometry.Pos.CENTER);
+            placeholder.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 50;");
+
+            Label titleLabel = new Label("⚠ Error Loading " + viewName);
+            titleLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #e74c3c;");
+
+            Label messageLabel = new Label("Could not load the view.\nPlease check if the FXML file exists.");
+            messageLabel.setStyle("-fx-font-size: 14; -fx-text-fill: #666666; -fx-text-alignment: center;");
+            messageLabel.setWrapText(true);
+
+            Button backButton = new Button("← Back to Dashboard");
+            backButton.setStyle("-fx-background-color: #667eea; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;");
+            backButton.setOnAction(event -> showDashboard());
+
+            placeholder.getChildren().addAll(titleLabel, messageLabel, backButton);
+
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(placeholder);
         }
     }
 
@@ -296,38 +320,44 @@ public class DashboardController {
      */
     private void setActiveTab(Button activeButton) {
         // Reset all buttons
-        Button[] navButtons = {btnDashboard, btnProducts, btnCategories, btnSuppliers, btnSales};
+        Button[] navButtons = {btnDashboard, btnProducts, btnCategories, btnSuppliers, btnSales, btnUsers, btnReports};
 
         for (Button btn : navButtons) {
-            btn.setStyle("-fx-background-color: transparent; -fx-text-fill: white; " +
-                    "-fx-padding: 12 25; -fx-cursor: hand; " +
-                    "-fx-border-width: 0 0 3 0; -fx-border-color: transparent;");
+            if (btn != null) {
+                btn.setStyle("-fx-background-color: transparent; -fx-text-fill: white; " +
+                        "-fx-padding: 12 25; -fx-cursor: hand; " +
+                        "-fx-border-width: 0 0 3 0; -fx-border-color: transparent;");
+            }
         }
 
         // Highlight active button
-        activeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; " +
-                "-fx-padding: 12 25; -fx-cursor: hand; " +
-                "-fx-border-width: 0 0 3 0; -fx-border-color: #ffffff;");
+        if (activeButton != null) {
+            activeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; " +
+                    "-fx-padding: 12 25; -fx-cursor: hand; " +
+                    "-fx-border-width: 0 0 3 0; -fx-border-color: #ffffff;");
+        }
     }
 
     /**
      * Adds hover effects to navigation buttons
      */
     private void addNavButtonHoverEffects() {
-        Button[] navButtons = {btnDashboard, btnProducts, btnCategories, btnSuppliers, btnSales};
+        Button[] navButtons = {btnDashboard, btnProducts, btnCategories, btnSuppliers, btnSales, btnUsers, btnReports};
 
         for (Button btn : navButtons) {
-            btn.setOnMouseEntered(e -> {
-                if (!btn.getStyle().contains("#ffffff")) { // Not active
-                    btn.setStyle(btn.getStyle() + "-fx-background-color: rgba(255,255,255,0.1);");
-                }
-            });
+            if (btn != null) {
+                btn.setOnMouseEntered(e -> {
+                    if (!btn.getStyle().contains("#ffffff")) { // Not active
+                        btn.setStyle(btn.getStyle() + "-fx-background-color: rgba(255,255,255,0.1);");
+                    }
+                });
 
-            btn.setOnMouseExited(e -> {
-                if (!btn.getStyle().contains("border-color: #ffffff")) { // Not active
-                    btn.setStyle(btn.getStyle().replace("-fx-background-color: rgba(255,255,255,0.1);", ""));
-                }
-            });
+                btn.setOnMouseExited(e -> {
+                    if (!btn.getStyle().contains("border-color: #ffffff")) { // Not active
+                        btn.setStyle(btn.getStyle().replace("-fx-background-color: rgba(255,255,255,0.1);", ""));
+                    }
+                });
+            }
         }
     }
 

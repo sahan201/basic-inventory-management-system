@@ -1,4 +1,4 @@
-open module com.example.dummy_inventory {
+module com.example.dummy_inventory {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -21,5 +21,16 @@ open module com.example.dummy_inventory {
 
     requires org.apache.poi.ooxml;
 
+    // Export main package
     exports com.example.dummy_inventory;
+
+    // Open specific packages for JavaFX reflection (FXML controllers)
+    opens com.example.dummy_inventory.controller to javafx.fxml;
+    opens com.example.dummy_inventory.model to javafx.base;
+
+    // Export specific packages if needed by other modules
+    exports com.example.dummy_inventory.controller;
+    exports com.example.dummy_inventory.model;
+    exports com.example.dummy_inventory.dao;
+    exports com.example.dummy_inventory.util;
 }

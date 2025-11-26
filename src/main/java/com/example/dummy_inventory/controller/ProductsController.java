@@ -413,6 +413,8 @@ public class ProductsController {
             int quantity = Integer.parseInt(quantityField.getText().trim());
             if (quantity < 0) {
                 errors.append("• Quantity cannot be negative\n");
+            } else if (quantity > 1000000) {
+                errors.append("• Quantity cannot exceed 1,000,000 (check for data entry errors)\n");
             }
         } catch (NumberFormatException e) {
             errors.append("• Quantity must be a valid number\n");
@@ -422,6 +424,8 @@ public class ProductsController {
             double price = Double.parseDouble(priceField.getText().trim());
             if (price < 0) {
                 errors.append("• Price cannot be negative\n");
+            } else if (price > 1000000) {
+                errors.append("• Price cannot exceed $1,000,000 (check for data entry errors)\n");
             }
         } catch (NumberFormatException e) {
             errors.append("• Price must be a valid number\n");

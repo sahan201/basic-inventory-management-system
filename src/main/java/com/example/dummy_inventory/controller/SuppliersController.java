@@ -22,10 +22,12 @@ public class SuppliersController {
     @FXML private TableColumn<Supplier, String> colName;
     @FXML private TableColumn<Supplier, String> colContact;
     @FXML private TableColumn<Supplier, String> colEmail;
+    @FXML private TableColumn<Supplier, String> colPhone;
 
     @FXML private TextField nameField;
     @FXML private TextField contactField;
     @FXML private TextField emailField;
+    @FXML private TextField phoneField;
     @FXML private TextField searchField;
     @FXML private Label statusLabel;
     @FXML private Label totalLabel;
@@ -47,6 +49,7 @@ public class SuppliersController {
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colContact.setCellValueFactory(new PropertyValueFactory<>("contactPerson"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
     }
 
     private void setupTableSelection() {
@@ -94,6 +97,7 @@ public class SuppliersController {
         nameField.setText(selectedSupplier.getName());
         contactField.setText(selectedSupplier.getContactPerson());
         emailField.setText(selectedSupplier.getEmail());
+        phoneField.setText(selectedSupplier.getPhone());
 
         setStatus("Editing: " + selectedSupplier.getName(), true);
     }
@@ -107,11 +111,13 @@ public class SuppliersController {
         String name = nameField.getText().trim();
         String contact = contactField.getText().trim();
         String email = emailField.getText().trim();
+        String phone = phoneField.getText().trim();
 
         if (isEditMode && selectedSupplier != null) {
             selectedSupplier.setName(name);
             selectedSupplier.setContactPerson(contact);
             selectedSupplier.setEmail(email);
+            selectedSupplier.setPhone(phone);
 
             if (supplierDAO.updateSupplier(selectedSupplier)) {
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Supplier updated successfully!");
@@ -123,7 +129,7 @@ public class SuppliersController {
                 setStatus("Failed to update supplier", false);
             }
         } else {
-            Supplier newSupplier = new Supplier(name, contact, email);
+            Supplier newSupplier = new Supplier(name, contact, email, phone);
 
             if (supplierDAO.createSupplier(newSupplier)) {
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Supplier added successfully!");
@@ -190,6 +196,7 @@ public class SuppliersController {
         nameField.clear();
         contactField.clear();
         emailField.clear();
+        phoneField.clear();
         isEditMode = false;
         selectedSupplier = null;
         saveButton.setText("💾 Save New");
@@ -208,8 +215,20 @@ public class SuppliersController {
         }
 
         String email = emailField.getText().trim();
-        if (!email.isEmpty() && !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+        // Improved email validation regex that checks for:
+        // - Valid username part (alphanumeric, dots, hyphens, underscores)
+        // - @ symbol
+        // - Valid domain name
+        // - Valid TLD (at least 2 characters)
+        if (!email.isEmpty() && !email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             errors.append("• Invalid email format\n");
+        }
+
+        String phone = phoneField.getText().trim();
+        // Phone validation: allow digits, spaces, hyphens, parentheses, and plus sign
+        // Examples: +1-123-456-7890, (123) 456-7890, 123-456-7890, 1234567890
+        if (!phone.isEmpty() && !phone.matches("^[+]?[(]?[0-9]{1,4}[)]?[-\\s.]?[(]?[0-9]{1,4}[)]?[-\\s.]?[0-9]{1,5}[-\\s.]?[0-9]{1,6}$")) {
+            errors.append("• Invalid phone number format\n");
         }
 
         if (errors.length() > 0) {
