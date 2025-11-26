@@ -1,26 +1,56 @@
 package com.example.dummy_inventory.db;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * DatabaseConnection class manages MySQL database connections
  * Uses Singleton pattern to ensure only one connection instance
+ * Reads database credentials from database.properties file
  */
 public class DatabaseConnection {
 
-    // Database connection details
-    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/inventory_management";
-    private static final String DATABASE_USER = "root";
-    private static final String DATABASE_PASSWORD = "2001@sahan";
-
-    // Optional: Add these parameters to the URL for better connection handling
-    private static final String CONNECTION_PARAMS = "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String FULL_URL = DATABASE_URL + CONNECTION_PARAMS;
+    // Database connection details - loaded from properties file
+    private static final String DATABASE_URL;
+    private static final String DATABASE_USER;
+    private static final String DATABASE_PASSWORD;
+    private static final String FULL_URL;
 
     // Singleton instance
     private static Connection connection = null;
+
+    // Static block to load database configuration from properties file
+    static {
+        Properties props = new Properties();
+        try (InputStream input = DatabaseConnection.class.getClassLoader()
+                .getResourceAsStream("database.properties")) {
+
+            if (input == null) {
+                System.err.println("ERROR: database.properties file not found in resources folder!");
+                System.err.println("Please create src/main/resources/database.properties");
+                throw new RuntimeException("database.properties file not found");
+            }
+
+            props.load(input);
+
+            DATABASE_URL = props.getProperty("db.url");
+            DATABASE_USER = props.getProperty("db.user");
+            DATABASE_PASSWORD = props.getProperty("db.password");
+            String connectionParams = props.getProperty("db.connection.params", "");
+            FULL_URL = DATABASE_URL + connectionParams;
+
+            System.out.println("Database configuration loaded successfully from database.properties");
+
+        } catch (IOException e) {
+            System.err.println("ERROR: Failed to load database configuration!");
+            e.printStackTrace();
+            throw new RuntimeException("Failed to load database configuration", e);
+        }
+    }
 
     /**
      * Private constructor to prevent instantiation
@@ -133,9 +163,9 @@ public class DatabaseConnection {
             System.out.println("✗ Failed to make connection.");
             System.out.println("\nTroubleshooting steps:");
             System.out.println("1. Make sure MySQL server is running");
-            System.out.println("2. Check database name: inventory_management exists");
-            System.out.println("3. Verify username: " + DATABASE_USER);
-            System.out.println("4. Verify password is correct");
+            System.out.println("2. Check database name exists in database.properties");
+            System.out.println("3. Verify credentials in database.properties");
+            System.out.println("4. Ensure database.properties is in src/main/resources/");
             System.out.println("5. Ensure MySQL Connector JAR is in classpath");
         }
 

@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Database Configuration ###
+# Never commit database credentials to version control
+src/main/resources/database.properties

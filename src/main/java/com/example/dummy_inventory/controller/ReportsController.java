@@ -45,6 +45,12 @@ public class ReportsController {
         User currentUser = LoginController.getCurrentUser();
         if (currentUser == null || !currentUser.canViewReports()) {
             showError("Access Denied: Manager/Admin privileges required");
+
+            // Disable all controls to prevent unauthorized access
+            disableAllControls();
+
+            // Clear all data displays
+            clearAllData();
             return;
         }
 
@@ -61,6 +67,29 @@ public class ReportsController {
         loadDashboardStats();
     }
 
+    /**
+     * Disable all controls when user doesn't have permission
+     */
+    private void disableAllControls() {
+        if (reportTypeComboBox != null) reportTypeComboBox.setDisable(true);
+        if (startDatePicker != null) startDatePicker.setDisable(true);
+        if (endDatePicker != null) endDatePicker.setDisable(true);
+        if (reportTextArea != null) reportTextArea.setDisable(true);
+    }
+
+    /**
+     * Clear all data displays when user doesn't have permission
+     */
+    private void clearAllData() {
+        if (totalRevenueLabel != null) totalRevenueLabel.setText("N/A");
+        if (totalProductsLabel != null) totalProductsLabel.setText("N/A");
+        if (totalCategoriesLabel != null) totalCategoriesLabel.setText("N/A");
+        if (lowStockCountLabel != null) lowStockCountLabel.setText("N/A");
+        if (inventoryValueLabel != null) inventoryValueLabel.setText("N/A");
+        if (totalProfitLabel != null) totalProfitLabel.setText("N/A");
+        if (reportTextArea != null) reportTextArea.setText("Access denied. This feature requires Manager or Admin privileges.");
+    }
+
     private void loadDashboardStats() {
         totalRevenueLabel.setText("$" + String.format("%.2f", reportsDAO.getTotalRevenue()));
         totalProductsLabel.setText(String.valueOf(reportsDAO.getTotalProductCount()));
@@ -72,6 +101,13 @@ public class ReportsController {
 
     @FXML
     private void handleGenerateReport() {
+        // Verify permissions before generating report
+        User currentUser = LoginController.getCurrentUser();
+        if (currentUser == null || !currentUser.canViewReports()) {
+            showError("Access Denied: Manager/Admin privileges required");
+            return;
+        }
+
         String reportType = reportTypeComboBox.getValue();
         if (reportType == null) {
             showError("Please select a report type.");
@@ -165,6 +201,13 @@ public class ReportsController {
 
     @FXML
     private void handleExportProducts() {
+        // Verify permissions before exporting
+        User currentUser = LoginController.getCurrentUser();
+        if (currentUser == null || !currentUser.canViewReports()) {
+            showError("Access Denied: Manager/Admin privileges required");
+            return;
+        }
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Export Products to CSV");
         fileChooser.getExtensionFilters().add(
@@ -184,6 +227,13 @@ public class ReportsController {
 
     @FXML
     private void handleExportSales() {
+        // Verify permissions before exporting
+        User currentUser = LoginController.getCurrentUser();
+        if (currentUser == null || !currentUser.canViewReports()) {
+            showError("Access Denied: Manager/Admin privileges required");
+            return;
+        }
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Export Sales to CSV");
         fileChooser.getExtensionFilters().add(
