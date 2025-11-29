@@ -10,46 +10,74 @@ import java.util.List;
 
 public class UserDAO {
 
-    public User login(String username, String password) {
-        String sql = "SELECT user_id, username, password, role, full_name, email, is_active, " +
-                     "created_at, last_login FROM User WHERE username = ? AND is_active = TRUE";
+    // Paste this inside UserDAO.java, replacing the existing login method
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+public User login(String username, String password) {
+    // We removed 'AND is_active = TRUE' to debug if the user exists but is inactive
+    String sql = "SELECT user_id, username, password, role, full_name, email, is_active, " +
+                 "created_at, last_login FROM User WHERE username = ?";
 
-            pstmt.setString(1, username);
+    System.out.println("--- DEBUG LOGIN START ---");
+    System.out.println("Testing username: '" + username + "'");
+    System.out.println("Testing password: '" + password + "'");
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    String hashedPassword = rs.getString("password");
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-                    if (BCrypt.checkpw(password, hashedPassword)) {
-                        User user = new User(
-                            rs.getInt("user_id"),
-                            rs.getString("username"),
-                            hashedPassword,
-                            User.Role.valueOf(rs.getString("role")),
-                            rs.getString("full_name"),
-                            rs.getString("email"),
-                            rs.getBoolean("is_active"),
-                            rs.getTimestamp("created_at") != null ?
-                                rs.getTimestamp("created_at").toLocalDateTime() : null,
-                            rs.getTimestamp("last_login") != null ?
-                                rs.getTimestamp("last_login").toLocalDateTime() : null
-                        );
+        pstmt.setString(1, username);
 
-                        updateLastLogin(user.getUserId());
-                        return user;
-                    }
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                System.out.println("DEBUG: User found in database!");
+
+                String dbHash = rs.getString("password");
+                boolean isActive = rs.getBoolean("is_active");
+                
+                System.out.println("DEBUG: DB Hash: " + dbHash);
+                System.out.println("DEBUG: Is Active: " + isActive);
+
+                // Check 1: Is user active?
+                if (!isActive) {
+                    System.err.println("LOGIN FAIL: User exists but is_active is false");
+                    return null;
                 }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error during login:");
-            e.printStackTrace();
-        }
 
-        return null;
+                // Check 2: Does password match?
+                boolean passwordMatch = BCrypt.checkpw(password, dbHash);
+                System.out.println("DEBUG: Password Match Result: " + passwordMatch);
+
+                if (passwordMatch) {
+                    System.out.println("LOGIN SUCCESS: Credentials valid.");
+                    
+                    User user = new User(
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        dbHash,
+                        User.Role.valueOf(rs.getString("role")),
+                        rs.getString("full_name"),
+                        rs.getString("email"),
+                        rs.getBoolean("is_active"),
+                        rs.getTimestamp("created_at") != null ?
+                            rs.getTimestamp("created_at").toLocalDateTime() : null,
+                        rs.getTimestamp("last_login") != null ?
+                            rs.getTimestamp("last_login").toLocalDateTime() : null
+                    );
+                    updateLastLogin(user.getUserId());
+                    return user;
+                } else {
+                    System.err.println("LOGIN FAIL: Password hash mismatch.");
+                }
+            } else {
+                System.err.println("LOGIN FAIL: Username '" + username + "' not found in database.");
+            }
+        }
+    } catch (SQLException e) {
+        System.err.println("ERROR: Database error during login");
+        e.printStackTrace();
     }
+    System.out.println("--- DEBUG LOGIN END ---");
+    return null;
+}
 
     private void updateLastLogin(int userId) {
         String sql = "UPDATE User SET last_login = CURRENT_TIMESTAMP WHERE user_id = ?";

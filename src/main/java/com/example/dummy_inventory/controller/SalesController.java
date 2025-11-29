@@ -164,8 +164,8 @@ public class SalesController {
         }
 
         // Create sale
-        Sale sale = new Sale(product.getProductId(), quantity, LocalDateTime.now());
-
+        // Pass the product price as the 3rd argument
+        Sale sale = new Sale(product.getProductId(), quantity, product.getPrice(), LocalDateTime.now());
         if (saleDAO.createSale(sale)) {
             showAlert(Alert.AlertType.INFORMATION, "Success",
                     String.format("Sale recorded!\n%d x %s = $%.2f\n\nStock updated automatically.",
