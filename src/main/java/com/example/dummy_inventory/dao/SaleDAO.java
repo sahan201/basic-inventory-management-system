@@ -13,101 +13,89 @@ public class SaleDAO {
     private ProductDAO productDAO = new ProductDAO();
 
     public boolean createSale(Sale sale) {
-        Connection conn = null;
-
-        try {
-            conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection()) {
             conn.setAutoCommit(false);
 
-            // Fetch product to get current price and check stock
-            Product product = productDAO.getProductById(sale.getProductId());
-            if (product == null) {
-                System.err.println("Product not found");
+            try {
+                // Fetch product to get current price and check stock
+                Product product = productDAO.getProductById(sale.getProductId());
+                if (product == null) {
+                    System.err.println("Product not found");
+                    conn.rollback();
+                    return false;
+                }
+
+                // Check stock availability
+                if (product.getQuantityInStock() < sale.getQuantitySold()) {
+                    System.err.println("Insufficient stock. Available: " + product.getQuantityInStock());
+                    conn.rollback();
+                    return false;
+                }
+
+                // Set unit price from product if not already set
+                if (sale.getUnitPrice() == 0) {
+                    sale.setUnitPrice(product.getPrice());
+                }
+
+                // Calculate total amount
+                double totalAmount = sale.getQuantitySold() * sale.getUnitPrice();
+                sale.setTotalAmount(totalAmount);
+
+                // Insert sale with all required fields
+                String insertSql = "INSERT INTO Sale (product_id, quantity_sold, unit_price, total_amount, sale_date, user_id, payment_method, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
+                    pstmt.setInt(1, sale.getProductId());
+                    pstmt.setInt(2, sale.getQuantitySold());
+                    pstmt.setDouble(3, sale.getUnitPrice());
+                    pstmt.setDouble(4, sale.getTotalAmount());
+                    pstmt.setTimestamp(5, Timestamp.valueOf(sale.getSaleDate()));
+
+                    // Handle nullable user_id
+                    if (sale.getUserId() != null) {
+                        pstmt.setInt(6, sale.getUserId());
+                    } else {
+                        pstmt.setNull(6, java.sql.Types.INTEGER);
+                    }
+
+                    // Handle payment method
+                    if (sale.getPaymentMethod() != null) {
+                        pstmt.setString(7, sale.getPaymentMethod().name());
+                    } else {
+                        pstmt.setString(7, Sale.PaymentMethod.CASH.name());
+                    }
+
+                    // Handle nullable notes
+                    if (sale.getNotes() != null) {
+                        pstmt.setString(8, sale.getNotes());
+                    } else {
+                        pstmt.setNull(8, java.sql.Types.VARCHAR);
+                    }
+
+                    pstmt.executeUpdate();
+                }
+
+                // Update product stock
+                String updateSql = "UPDATE Product SET quantity_in_stock = quantity_in_stock - ? WHERE product_id = ?";
+                try (PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
+                    pstmt.setInt(1, sale.getQuantitySold());
+                    pstmt.setInt(2, sale.getProductId());
+                    pstmt.executeUpdate();
+                }
+
+                conn.commit();
+                return true;
+
+            } catch (SQLException e) {
+                System.err.println("Error creating sale:");
+                e.printStackTrace();
                 conn.rollback();
                 return false;
             }
-
-            // Check stock availability
-            if (product.getQuantityInStock() < sale.getQuantitySold()) {
-                System.err.println("Insufficient stock. Available: " + product.getQuantityInStock());
-                conn.rollback();
-                return false;
-            }
-
-            // Set unit price from product if not already set
-            if (sale.getUnitPrice() == 0) {
-                sale.setUnitPrice(product.getPrice());
-            }
-
-            // Calculate total amount
-            double totalAmount = sale.getQuantitySold() * sale.getUnitPrice();
-            sale.setTotalAmount(totalAmount);
-
-            // Insert sale with all required fields
-            String insertSql = "INSERT INTO Sale (product_id, quantity_sold, unit_price, total_amount, sale_date, user_id, payment_method, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
-                pstmt.setInt(1, sale.getProductId());
-                pstmt.setInt(2, sale.getQuantitySold());
-                pstmt.setDouble(3, sale.getUnitPrice());
-                pstmt.setDouble(4, sale.getTotalAmount());
-                pstmt.setTimestamp(5, Timestamp.valueOf(sale.getSaleDate()));
-
-                // Handle nullable user_id
-                if (sale.getUserId() != null) {
-                    pstmt.setInt(6, sale.getUserId());
-                } else {
-                    pstmt.setNull(6, java.sql.Types.INTEGER);
-                }
-
-                // Handle payment method
-                if (sale.getPaymentMethod() != null) {
-                    pstmt.setString(7, sale.getPaymentMethod().name());
-                } else {
-                    pstmt.setString(7, Sale.PaymentMethod.CASH.name());
-                }
-
-                // Handle nullable notes
-                if (sale.getNotes() != null) {
-                    pstmt.setString(8, sale.getNotes());
-                } else {
-                    pstmt.setNull(8, java.sql.Types.VARCHAR);
-                }
-
-                pstmt.executeUpdate();
-            }
-
-            // Update product stock
-            String updateSql = "UPDATE Product SET quantity_in_stock = quantity_in_stock - ? WHERE product_id = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
-                pstmt.setInt(1, sale.getQuantitySold());
-                pstmt.setInt(2, sale.getProductId());
-                pstmt.executeUpdate();
-            }
-
-            conn.commit();
-            return true;
 
         } catch (SQLException e) {
-            System.err.println("Error creating sale:");
+            System.err.println("Error with database connection:");
             e.printStackTrace();
-
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
             return false;
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close(); // Properly close the connection
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
@@ -190,70 +178,58 @@ public class SaleDAO {
     }
 
     public boolean deleteSale(int saleId) {
-        Connection conn = null;
-
-        try {
-            conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection()) {
             conn.setAutoCommit(false);
 
-            // First, get the sale details to restore stock
-            String getSaleSql = "SELECT product_id, quantity_sold FROM Sale WHERE sale_id = ?";
-            int productId = 0;
-            int quantitySold = 0;
+            try {
+                // First, get the sale details to restore stock
+                String getSaleSql = "SELECT product_id, quantity_sold FROM Sale WHERE sale_id = ?";
+                int productId = 0;
+                int quantitySold = 0;
 
-            try (PreparedStatement pstmt = conn.prepareStatement(getSaleSql)) {
-                pstmt.setInt(1, saleId);
-                try (ResultSet rs = pstmt.executeQuery()) {
-                    if (rs.next()) {
-                        productId = rs.getInt("product_id");
-                        quantitySold = rs.getInt("quantity_sold");
-                    } else {
-                        // Sale not found
-                        conn.rollback();
-                        return false;
+                try (PreparedStatement pstmt = conn.prepareStatement(getSaleSql)) {
+                    pstmt.setInt(1, saleId);
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        if (rs.next()) {
+                            productId = rs.getInt("product_id");
+                            quantitySold = rs.getInt("quantity_sold");
+                        } else {
+                            // Sale not found
+                            conn.rollback();
+                            return false;
+                        }
                     }
                 }
-            }
 
-            // Restore stock to product
-            String updateStockSql = "UPDATE Product SET quantity_in_stock = quantity_in_stock + ? WHERE product_id = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(updateStockSql)) {
-                pstmt.setInt(1, quantitySold);
-                pstmt.setInt(2, productId);
-                pstmt.executeUpdate();
-            }
+                // Restore stock to product
+                String updateStockSql = "UPDATE Product SET quantity_in_stock = quantity_in_stock + ? WHERE product_id = ?";
+                try (PreparedStatement pstmt = conn.prepareStatement(updateStockSql)) {
+                    pstmt.setInt(1, quantitySold);
+                    pstmt.setInt(2, productId);
+                    pstmt.executeUpdate();
+                }
 
-            // Delete the sale
-            String deleteSql = "DELETE FROM Sale WHERE sale_id = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(deleteSql)) {
-                pstmt.setInt(1, saleId);
-                pstmt.executeUpdate();
-            }
+                // Delete the sale
+                String deleteSql = "DELETE FROM Sale WHERE sale_id = ?";
+                try (PreparedStatement pstmt = conn.prepareStatement(deleteSql)) {
+                    pstmt.setInt(1, saleId);
+                    pstmt.executeUpdate();
+                }
 
-            conn.commit();
-            return true;
+                conn.commit();
+                return true;
+
+            } catch (SQLException e) {
+                System.err.println("Error deleting sale:");
+                e.printStackTrace();
+                conn.rollback();
+                return false;
+            }
 
         } catch (SQLException e) {
-            System.err.println("Error deleting sale:");
+            System.err.println("Error with database connection:");
             e.printStackTrace();
-
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
             return false;
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close(); // Properly close the connection
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 

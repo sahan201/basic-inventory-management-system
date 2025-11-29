@@ -3,10 +3,15 @@ package com.example.dummy_inventory.model;
 public class Product {
     private int productId;
     private String name;
+    private String description;
     private int quantityInStock;
     private double price;
+    private double costPrice;
     private int categoryId;
     private int supplierId;
+    private int reorderLevel;
+    private String barcode;
+    private String sku;
 
     // Additional fields for display purposes (not in database)
     private String categoryName;
@@ -102,9 +107,62 @@ public class Product {
         this.supplierName = supplierName;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(double costPrice) {
+        this.costPrice = costPrice;
+    }
+
+    public int getReorderLevel() {
+        return reorderLevel;
+    }
+
+    public void setReorderLevel(int reorderLevel) {
+        this.reorderLevel = reorderLevel;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
     // Utility method to calculate total value
     public double getTotalValue() {
         return quantityInStock * price;
+    }
+
+    // Utility method to calculate profit margin
+    public double getProfitMargin() {
+        if (costPrice > 0) {
+            return ((price - costPrice) / costPrice) * 100;
+        }
+        return 0.0;
+    }
+
+    // Utility method to check if reorder is needed
+    public boolean needsReorder() {
+        return quantityInStock <= reorderLevel;
     }
 
     // toString method

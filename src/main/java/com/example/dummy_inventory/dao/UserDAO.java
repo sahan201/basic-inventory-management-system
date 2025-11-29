@@ -92,7 +92,7 @@ public User login(String username, String password) {
     }
 
     public static String hashPassword(String plainTextPassword) {
-        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
+        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt(12));
     }
 
     public static boolean verifyPassword(String plainTextPassword, String hashedPassword) {
@@ -175,6 +175,37 @@ public User login(String username, String password) {
             }
         } catch (SQLException e) {
             System.err.println("Error getting user by ID:");
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public User getUserByUsername(String username) {
+        String sql = "SELECT user_id, username, password, role, full_name, email, is_active, created_at, last_login FROM User WHERE username = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, username);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new User(
+                            rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            User.Role.valueOf(rs.getString("role")),
+                            rs.getString("full_name"),
+                            rs.getString("email"),
+                            rs.getBoolean("is_active"),
+                            rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : null,
+                            rs.getTimestamp("last_login") != null ? rs.getTimestamp("last_login").toLocalDateTime() : null
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting user by username:");
             e.printStackTrace();
         }
 
