@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.DropShadow?>
+
+<VBox
+        fx:controller="com.example.dummy_inventory.controller.RegisterController"
+        xmlns:fx="http://javafx.com/fxml/1"
+        xmlns="http://javafx.com/javafx/17"
+        alignment="CENTER"
+        spacing="20"
+        prefWidth="450"
+        prefHeight="650"
+        style="-fx-background-color: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);"
+>
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40" />
+    </padding>
+
+    <!-- Registration Card Container -->
+    <VBox
+            alignment="CENTER"
+            spacing="15"
+            style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;"
+            maxWidth="360"
+    >
+        <effect>
+            <DropShadow radius="15" offsetY="5" color="#00000040"/>
+        </effect>
+
+        <!-- Title Section -->
+        <VBox alignment="CENTER" spacing="5">
+            <Label text="👤">
+                <font>
+                    <Font size="40" />
+                </font>
+            </Label>
+
+            <Label text="Create Account">
+                <font>
+                    <Font name="System Bold" size="22" />
+                </font>
+                <style>
+                    -fx-text-fill: #667eea;
+                </style>
+            </Label>
+
+            <Label text="Register to access the system">
+                <font>
+                    <Font size="12" />
+                </font>
+                <style>
+                    -fx-text-fill: #888888;
+                </style>
+            </Label>
+        </VBox>
+
+        <Separator prefWidth="250" />
+
+        <!-- Input Fields Section -->
+        <VBox spacing="12" alignment="CENTER">
+            <!-- Username Field -->
+            <VBox spacing="5" alignment="CENTER_LEFT">
+                <Label text="Username *">
+                    <font>
+                        <Font name="System Bold" size="11" />
+                    </font>
+                    <style>
+                        -fx-text-fill: #333333;
+                    </style>
+                </Label>
+                <TextField
+                        fx:id="usernameField"
+                        promptText="Choose a username"
+                        prefWidth="300"
+                        style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #dddddd; -fx-border-width: 1; -fx-padding: 10;"
+                >
+                    <font>
+                        <Font size="13" />
+                    </font>
+                </TextField>
+            </VBox>
+
+            <!-- Full Name Field -->
+            <VBox spacing="5" alignment="CENTER_LEFT">
+                <Label text="Full Name *">
+                    <font>
+                        <Font name="System Bold" size="11" />
+                    </font>
+                    <style>
+                        -fx-text-fill: #333333;
+                    </style>
+                </Label>
+                <TextField
+                        fx:id="fullNameField"
+                        promptText="Enter your full name"
+                        prefWidth="300"
+                        style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #dddddd; -fx-border-width: 1; -fx-padding: 10;"
+                >
+                    <font>
+                        <Font size="13" />
+                    </font>
+                </TextField>
+            </VBox>
+
+            <!-- Email Field -->
+            <VBox spacing="5" alignment="CENTER_LEFT">
+                <Label text="Email *">
+                    <font>
+                        <Font name="System Bold" size="11" />
+                    </font>
+                    <style>
+                        -fx-text-fill: #333333;
+                    </style>
+                </Label>
+                <TextField
+                        fx:id="emailField"
+                        promptText="Enter your email"
+                        prefWidth="300"
+                        style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #dddddd; -fx-border-width: 1; -fx-padding: 10;"
+                >
+                    <font>
+                        <Font size="13" />
+                    </font>
+                </TextField>
+            </VBox>
+
+            <!-- Password Field -->
+            <VBox spacing="5" alignment="CENTER_LEFT">
+                <Label text="Password *">
+                    <font>
+                        <Font name="System Bold" size="11" />
+                    </font>
+                    <style>
+                        -fx-text-fill: #333333;
+                    </style>
+                </Label>
+                <PasswordField
+                        fx:id="passwordField"
+                        promptText="Choose a password (min 6 characters)"
+                        prefWidth="300"
+                        style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #dddddd; -fx-border-width: 1; -fx-padding: 10;"
+                >
+                    <font>
+                        <Font size="13" />
+                    </font>
+                </PasswordField>
+            </VBox>
+
+            <!-- Confirm Password Field -->
+            <VBox spacing="5" alignment="CENTER_LEFT">
+                <Label text="Confirm Password *">
+                    <font>
+                        <Font name="System Bold" size="11" />
+                    </font>
+                    <style>
+                        -fx-text-fill: #333333;
+                    </style>
+                </Label>
+                <PasswordField
+                        fx:id="confirmPasswordField"
+                        promptText="Re-enter your password"
+                        prefWidth="300"
+                        style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #dddddd; -fx-border-width: 1; -fx-padding: 10;"
+                        onAction="#handleRegister"
+                >
+                    <font>
+                        <Font size="13" />
+                    </font>
+                </PasswordField>
+            </VBox>
+        </VBox>
+
+        <!-- Register Button -->
+        <Button
+                fx:id="registerButton"
+                text="Create Account"
+                onAction="#handleRegister"
+                prefWidth="300"
+                prefHeight="40"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;"
+        >
+            <font>
+                <Font name="System Bold" size="14" />
+            </font>
+        </Button>
+
+        <!-- Status Label -->
+        <Label
+                fx:id="statusLabel"
+                textFill="#e74c3c"
+                wrapText="true"
+                textAlignment="CENTER"
+                maxWidth="300"
+        >
+            <font>
+                <Font size="11" />
+            </font>
+        </Label>
+
+        <!-- Back to Login Link -->
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="Already have an account?">
+                <font>
+                    <Font size="12" />
+                </font>
+                <style>
+                    -fx-text-fill: #666666;
+                </style>
+            </Label>
+            <Hyperlink
+                    fx:id="loginLink"
+                    text="Login here"
+                    onAction="#handleBackToLogin"
+                    style="-fx-text-fill: #667eea;"
+            >
+                <font>
+                    <Font name="System Bold" size="12" />
+                </font>
+            </Hyperlink>
+        </HBox>
+    </VBox>
+
+    <!-- Bottom Info -->
+    <Label text="Inventory Management System v1.0" textAlignment="CENTER">
+        <font>
+            <Font size="10" />
+        </font>
+        <style>
+            -fx-text-fill: rgba(255, 255, 255, 0.7);
+        </style>
+    </Label>
+</VBox>
