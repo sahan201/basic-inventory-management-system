@@ -9,16 +9,21 @@ import java.util.List;
 
 public class ProductDAO {
     public boolean createProduct(Product product) {
-        String sql = "INSERT INTO Product (name, quantity_in_stock, price, category_id, supplier_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Product (name, description, quantity_in_stock, price, cost_price, category_id, supplier_id, reorder_level, barcode, sku) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, product.getName());
-            pstmt.setInt(2, product.getQuantityInStock());
-            pstmt.setDouble(3, product.getPrice());
-            pstmt.setInt(4, product.getCategoryId());
-            pstmt.setInt(5, product.getSupplierId());
+            pstmt.setString(2, product.getDescription());
+            pstmt.setInt(3, product.getQuantityInStock());
+            pstmt.setDouble(4, product.getPrice());
+            pstmt.setDouble(5, product.getCostPrice());
+            pstmt.setInt(6, product.getCategoryId());
+            pstmt.setInt(7, product.getSupplierId());
+            pstmt.setInt(8, product.getReorderLevel());
+            pstmt.setString(9, product.getBarcode());
+            pstmt.setString(10, product.getSku());
 
             return pstmt.executeUpdate() > 0;
 
@@ -31,8 +36,9 @@ public class ProductDAO {
 
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT p.product_id, p.name, p.quantity_in_stock, p.price, " +
-                "p.category_id, p.supplier_id, c.name AS category_name, s.name AS supplier_name " +
+        String sql = "SELECT p.product_id, p.name, p.description, p.quantity_in_stock, p.price, p.cost_price, " +
+                "p.category_id, p.supplier_id, p.reorder_level, p.barcode, p.sku, " +
+                "c.name AS category_name, s.name AS supplier_name " +
                 "FROM Product p " +
                 "JOIN Category c ON p.category_id = c.category_id " +
                 "JOIN Supplier s ON p.supplier_id = s.supplier_id";
@@ -50,6 +56,11 @@ public class ProductDAO {
                         rs.getInt("category_id"),
                         rs.getInt("supplier_id")
                 );
+                product.setDescription(rs.getString("description"));
+                product.setCostPrice(rs.getDouble("cost_price"));
+                product.setReorderLevel(rs.getInt("reorder_level"));
+                product.setBarcode(rs.getString("barcode"));
+                product.setSku(rs.getString("sku"));
                 product.setCategoryName(rs.getString("category_name"));
                 product.setSupplierName(rs.getString("supplier_name"));
                 products.add(product);
@@ -63,8 +74,9 @@ public class ProductDAO {
     }
 
     public Product getProductById(int productId) {
-        String sql = "SELECT p.product_id, p.name, p.quantity_in_stock, p.price, " +
-                "p.category_id, p.supplier_id, c.name AS category_name, s.name AS supplier_name " +
+        String sql = "SELECT p.product_id, p.name, p.description, p.quantity_in_stock, p.price, p.cost_price, " +
+                "p.category_id, p.supplier_id, p.reorder_level, p.barcode, p.sku, " +
+                "c.name AS category_name, s.name AS supplier_name " +
                 "FROM Product p " +
                 "JOIN Category c ON p.category_id = c.category_id " +
                 "JOIN Supplier s ON p.supplier_id = s.supplier_id " +
@@ -85,6 +97,11 @@ public class ProductDAO {
                             rs.getInt("category_id"),
                             rs.getInt("supplier_id")
                     );
+                    product.setDescription(rs.getString("description"));
+                    product.setCostPrice(rs.getDouble("cost_price"));
+                    product.setReorderLevel(rs.getInt("reorder_level"));
+                    product.setBarcode(rs.getString("barcode"));
+                    product.setSku(rs.getString("sku"));
                     product.setCategoryName(rs.getString("category_name"));
                     product.setSupplierName(rs.getString("supplier_name"));
                     return product;
@@ -99,17 +116,22 @@ public class ProductDAO {
     }
 
     public boolean updateProduct(Product product) {
-        String sql = "UPDATE Product SET name = ?, quantity_in_stock = ?, price = ?, category_id = ?, supplier_id = ? WHERE product_id = ?";
+        String sql = "UPDATE Product SET name = ?, description = ?, quantity_in_stock = ?, price = ?, cost_price = ?, category_id = ?, supplier_id = ?, reorder_level = ?, barcode = ?, sku = ? WHERE product_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, product.getName());
-            pstmt.setInt(2, product.getQuantityInStock());
-            pstmt.setDouble(3, product.getPrice());
-            pstmt.setInt(4, product.getCategoryId());
-            pstmt.setInt(5, product.getSupplierId());
-            pstmt.setInt(6, product.getProductId());
+            pstmt.setString(2, product.getDescription());
+            pstmt.setInt(3, product.getQuantityInStock());
+            pstmt.setDouble(4, product.getPrice());
+            pstmt.setDouble(5, product.getCostPrice());
+            pstmt.setInt(6, product.getCategoryId());
+            pstmt.setInt(7, product.getSupplierId());
+            pstmt.setInt(8, product.getReorderLevel());
+            pstmt.setString(9, product.getBarcode());
+            pstmt.setString(10, product.getSku());
+            pstmt.setInt(11, product.getProductId());
 
             return pstmt.executeUpdate() > 0;
 
@@ -138,8 +160,9 @@ public class ProductDAO {
 
     public List<Product> searchProducts(String searchTerm) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT p.product_id, p.name, p.quantity_in_stock, p.price, " +
-                "p.category_id, p.supplier_id, c.name AS category_name, s.name AS supplier_name " +
+        String sql = "SELECT p.product_id, p.name, p.description, p.quantity_in_stock, p.price, p.cost_price, " +
+                "p.category_id, p.supplier_id, p.reorder_level, p.barcode, p.sku, " +
+                "c.name AS category_name, s.name AS supplier_name " +
                 "FROM Product p " +
                 "JOIN Category c ON p.category_id = c.category_id " +
                 "JOIN Supplier s ON p.supplier_id = s.supplier_id " +
@@ -160,6 +183,11 @@ public class ProductDAO {
                             rs.getInt("category_id"),
                             rs.getInt("supplier_id")
                     );
+                    product.setDescription(rs.getString("description"));
+                    product.setCostPrice(rs.getDouble("cost_price"));
+                    product.setReorderLevel(rs.getInt("reorder_level"));
+                    product.setBarcode(rs.getString("barcode"));
+                    product.setSku(rs.getString("sku"));
                     product.setCategoryName(rs.getString("category_name"));
                     product.setSupplierName(rs.getString("supplier_name"));
                     products.add(product);
@@ -175,8 +203,9 @@ public class ProductDAO {
 
     public List<Product> getLowStockProducts(int threshold) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT p.product_id, p.name, p.quantity_in_stock, p.price, " +
-                "p.category_id, p.supplier_id, c.name AS category_name, s.name AS supplier_name " +
+        String sql = "SELECT p.product_id, p.name, p.description, p.quantity_in_stock, p.price, p.cost_price, " +
+                "p.category_id, p.supplier_id, p.reorder_level, p.barcode, p.sku, " +
+                "c.name AS category_name, s.name AS supplier_name " +
                 "FROM Product p " +
                 "JOIN Category c ON p.category_id = c.category_id " +
                 "JOIN Supplier s ON p.supplier_id = s.supplier_id " +
@@ -198,6 +227,11 @@ public class ProductDAO {
                             rs.getInt("category_id"),
                             rs.getInt("supplier_id")
                     );
+                    product.setDescription(rs.getString("description"));
+                    product.setCostPrice(rs.getDouble("cost_price"));
+                    product.setReorderLevel(rs.getInt("reorder_level"));
+                    product.setBarcode(rs.getString("barcode"));
+                    product.setSku(rs.getString("sku"));
                     product.setCategoryName(rs.getString("category_name"));
                     product.setSupplierName(rs.getString("supplier_name"));
                     products.add(product);

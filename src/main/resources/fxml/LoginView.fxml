@@ -163,18 +163,6 @@
             </Hyperlink>
         </HBox>
 
-        <!-- Footer Info -->
-        <VBox alignment="CENTER" spacing="5" style="-fx-padding: 5 0 0 0;">
-            <Separator prefWidth="200" />
-            <Label text="Default Login: admin / admin123" textAlignment="CENTER">
-                <font>
-                    <Font size="10" />
-                </font>
-                <style>
-                    -fx-text-fill: #999999;
-                </style>
-            </Label>
-        </VBox>
     </VBox>
 
     <!-- Bottom Info -->
