@@ -18,7 +18,7 @@
 
     <!-- Header -->
     <HBox alignment="CENTER_LEFT" spacing="20">
-        <Label text="📊 Reports & Analytics" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+        <Label text="📊 Reports &amp; Analytics" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
         <Region HBox.hgrow="ALWAYS"/>
         <Button
                 text="🔄 Refresh"
@@ -34,7 +34,7 @@
         <!-- Row 1 -->
         <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.rowIndex="0" GridPane.columnIndex="0">
             <Label text="💰 Total Revenue" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            <Label fx:id="totalRevenueLabel" text="$0.00" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #27ae60;">
+            <Label fx:id="totalRevenueLabel" text="&#36;0.00" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #27ae60;">
                 <font><Font name="System Bold" size="28"/></font>
             </Label>
         </VBox>
@@ -63,14 +63,14 @@
 
         <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.rowIndex="1" GridPane.columnIndex="1">
             <Label text="💎 Inventory Value" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            <Label fx:id="inventoryValueLabel" text="$0.00" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #f39c12;">
+            <Label fx:id="inventoryValueLabel" text="&#36;0.00" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #f39c12;">
                 <font><Font name="System Bold" size="28"/></font>
             </Label>
         </VBox>
 
         <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.rowIndex="1" GridPane.columnIndex="2">
             <Label text="📈 Total Profit" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            <Label fx:id="totalProfitLabel" text="$0.00" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #16a085;">
+            <Label fx:id="totalProfitLabel" text="&#36;0.00" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #16a085;">
                 <font><Font name="System Bold" size="28"/></font>
             </Label>
         </VBox>
