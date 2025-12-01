@@ -110,7 +110,7 @@
                     <Label text="Unit Price:" style="-fx-font-weight: bold;"/>
                     <Label
                             fx:id="priceLabel"
-                            text="&#36;0.00"
+                            text="\$0.00"
                             style="-fx-font-size: 14; -fx-text-fill: #666666;"
                     />
                 </VBox>
@@ -120,7 +120,7 @@
                     <Label text="Total Amount:" style="-fx-font-weight: bold;"/>
                     <Label
                             fx:id="totalAmountLabel"
-                            text="&#36;0.00"
+                            text="\$0.00"
                             style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #27ae60;"
                     />
                 </VBox>
