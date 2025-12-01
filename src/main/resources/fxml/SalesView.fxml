@@ -22,7 +22,7 @@
         <Region HBox.hgrow="ALWAYS"/>
         <Label
                 fx:id="revenueLabel"
-                text="Total Revenue: $0.00"
+                text="Total Revenue: &#36;0.00"
                 style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #27ae60;"
         />
     </HBox>
