@@ -117,31 +117,31 @@ public class DashboardController {
                  Statement stmt = conn.createStatement()) {
 
                 // Get total products
-                int totalProducts = 0;
+                final int totalProducts;
                 try (ResultSet rs1 = stmt.executeQuery("SELECT COUNT(*) as count FROM Product")) {
                     totalProducts = rs1.next() ? rs1.getInt("count") : 0;
                 }
 
                 // Get total categories
-                int totalCategories = 0;
+                final int totalCategories;
                 try (ResultSet rs2 = stmt.executeQuery("SELECT COUNT(*) as count FROM Category")) {
                     totalCategories = rs2.next() ? rs2.getInt("count") : 0;
                 }
 
                 // Get total suppliers
-                int totalSuppliers = 0;
+                final int totalSuppliers;
                 try (ResultSet rs3 = stmt.executeQuery("SELECT COUNT(*) as count FROM Supplier")) {
                     totalSuppliers = rs3.next() ? rs3.getInt("count") : 0;
                 }
 
                 // Get total sales
-                int totalSales = 0;
+                final int totalSales;
                 try (ResultSet rs4 = stmt.executeQuery("SELECT COUNT(*) as count FROM Sale")) {
                     totalSales = rs4.next() ? rs4.getInt("count") : 0;
                 }
 
                 // Get low stock products (quantity < 20)
-                StringBuilder lowStockText = new StringBuilder();
+                final StringBuilder lowStockText = new StringBuilder();
                 try (ResultSet rs5 = stmt.executeQuery(
                         "SELECT name, quantity_in_stock FROM Product " +
                                 "WHERE quantity_in_stock < 20 ORDER BY quantity_in_stock ASC LIMIT 5")) {
