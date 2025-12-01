@@ -117,37 +117,45 @@ public class DashboardController {
                  Statement stmt = conn.createStatement()) {
 
                 // Get total products
-                ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as count FROM Product");
-                int totalProducts = rs.next() ? rs.getInt("count") : 0;
+                int totalProducts = 0;
+                try (ResultSet rs1 = stmt.executeQuery("SELECT COUNT(*) as count FROM Product")) {
+                    totalProducts = rs1.next() ? rs1.getInt("count") : 0;
+                }
 
                 // Get total categories
-                rs = stmt.executeQuery("SELECT COUNT(*) as count FROM Category");
-                int totalCategories = rs.next() ? rs.getInt("count") : 0;
+                int totalCategories = 0;
+                try (ResultSet rs2 = stmt.executeQuery("SELECT COUNT(*) as count FROM Category")) {
+                    totalCategories = rs2.next() ? rs2.getInt("count") : 0;
+                }
 
                 // Get total suppliers
-                rs = stmt.executeQuery("SELECT COUNT(*) as count FROM Supplier");
-                int totalSuppliers = rs.next() ? rs.getInt("count") : 0;
+                int totalSuppliers = 0;
+                try (ResultSet rs3 = stmt.executeQuery("SELECT COUNT(*) as count FROM Supplier")) {
+                    totalSuppliers = rs3.next() ? rs3.getInt("count") : 0;
+                }
 
                 // Get total sales
-                rs = stmt.executeQuery("SELECT COUNT(*) as count FROM Sale");
-                int totalSales = rs.next() ? rs.getInt("count") : 0;
+                int totalSales = 0;
+                try (ResultSet rs4 = stmt.executeQuery("SELECT COUNT(*) as count FROM Sale")) {
+                    totalSales = rs4.next() ? rs4.getInt("count") : 0;
+                }
 
                 // Get low stock products (quantity < 20)
-                rs = stmt.executeQuery(
-                        "SELECT name, quantity_in_stock FROM Product " +
-                                "WHERE quantity_in_stock < 20 ORDER BY quantity_in_stock ASC LIMIT 5"
-                );
-
                 StringBuilder lowStockText = new StringBuilder();
-                if (!rs.next()) {
-                    lowStockText.append("All products are well stocked! ✓");
-                } else {
-                    do {
-                        lowStockText.append(String.format("• %s (Stock: %d)\n",
-                                rs.getString("name"),
-                                rs.getInt("quantity_in_stock")
-                        ));
-                    } while (rs.next());
+                try (ResultSet rs5 = stmt.executeQuery(
+                        "SELECT name, quantity_in_stock FROM Product " +
+                                "WHERE quantity_in_stock < 20 ORDER BY quantity_in_stock ASC LIMIT 5")) {
+
+                    if (!rs5.next()) {
+                        lowStockText.append("All products are well stocked! ✓");
+                    } else {
+                        do {
+                            lowStockText.append(String.format("• %s (Stock: %d)\n",
+                                    rs5.getString("name"),
+                                    rs5.getInt("quantity_in_stock")
+                            ));
+                        } while (rs5.next());
+                    }
                 }
 
                 // Update UI on JavaFX thread

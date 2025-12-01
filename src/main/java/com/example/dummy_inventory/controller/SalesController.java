@@ -125,12 +125,19 @@ public class SalesController {
         Product selected = productComboBox.getValue();
         if (selected != null) {
             try {
-                int quantity = Integer.parseInt(quantityField.getText().trim());
-                double total = quantity * selected.getPrice();
-                totalAmountLabel.setText(String.format("$%.2f", total));
+                String qtyText = quantityField.getText();
+                if (qtyText != null && !qtyText.trim().isEmpty()) {
+                    int quantity = Integer.parseInt(qtyText.trim());
+                    double total = quantity * selected.getPrice();
+                    totalAmountLabel.setText(String.format("$%.2f", total));
+                } else {
+                    totalAmountLabel.setText("$0.00");
+                }
             } catch (NumberFormatException e) {
                 totalAmountLabel.setText("$0.00");
             }
+        } else {
+            totalAmountLabel.setText("$0.00");
         }
     }
 
@@ -143,7 +150,12 @@ public class SalesController {
 
     private void loadProducts() {
         List<Product> products = productDAO.getAllProducts();
-        productComboBox.setItems(FXCollections.observableArrayList(products));
+        if (products != null && !products.isEmpty()) {
+            productComboBox.setItems(FXCollections.observableArrayList(products));
+        } else {
+            productComboBox.setItems(FXCollections.observableArrayList());
+            setStatus("No products available. Please add products first.", false);
+        }
     }
 
     @FXML
@@ -153,6 +165,12 @@ public class SalesController {
         }
 
         Product product = productComboBox.getValue();
+        if (product == null) {
+            showAlert(Alert.AlertType.ERROR, "No Product Selected", "Please select a product to sell.");
+            setStatus("No product selected", false);
+            return;
+        }
+
         int quantity = Integer.parseInt(quantityField.getText().trim());
 
         // Check stock availability
