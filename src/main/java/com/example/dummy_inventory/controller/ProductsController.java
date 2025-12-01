@@ -263,6 +263,12 @@ public class ProductsController {
             Category category = categoryComboBox.getValue();
             Supplier supplier = supplierComboBox.getValue();
 
+            // Additional null checks for safety
+            if (category == null || supplier == null) {
+                showAlert(Alert.AlertType.ERROR, "Validation Error", "Please select both category and supplier.");
+                return;
+            }
+
             if (isEditMode && selectedProduct != null) {
                 // UPDATE existing product
                 selectedProduct.setName(name);

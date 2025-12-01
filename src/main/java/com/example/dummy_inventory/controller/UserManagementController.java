@@ -116,12 +116,24 @@ public class UserManagementController {
                 newUser.setEmail(emailField.getText().trim());
                 newUser.setActive(activeCheckBox.isSelected());
 
-                if (userDAO.createUser(newUser)) {
-                    showSuccess("User created successfully!");
-                    clearForm();
-                    loadUsers();
-                } else {
-                    showError("Failed to create user. Username may already exist.");
+                try {
+                    if (userDAO.createUser(newUser)) {
+                        showSuccess("User created successfully!");
+                        clearForm();
+                        loadUsers();
+                    } else {
+                        showError("Failed to create user. Please try again.");
+                    }
+                } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+                    showError("Username '" + usernameField.getText().trim() + "' already exists. Please choose a different username.");
+                } catch (java.sql.SQLException e) {
+                    // Check for MySQL duplicate entry error code (1062)
+                    if (e.getErrorCode() == 1062) {
+                        showError("Username '" + usernameField.getText().trim() + "' already exists. Please choose a different username.");
+                    } else {
+                        showError("Database error: " + e.getMessage());
+                    }
+                    e.printStackTrace();
                 }
             } else {
                 // Update existing user
@@ -142,7 +154,7 @@ public class UserManagementController {
                     clearForm();
                     loadUsers();
                 } else {
-                    showError("Failed to update user.");
+                    showError("Failed to update user. Username may already exist.");
                 }
             }
         } catch (Exception e) {

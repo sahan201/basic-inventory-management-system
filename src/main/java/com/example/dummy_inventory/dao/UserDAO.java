@@ -13,13 +13,8 @@ public class UserDAO {
     // Paste this inside UserDAO.java, replacing the existing login method
 
 public User login(String username, String password) {
-    // We removed 'AND is_active = TRUE' to debug if the user exists but is inactive
     String sql = "SELECT user_id, username, password, role, full_name, email, is_active, " +
-                 "created_at, last_login FROM User WHERE username = ?";
-
-    System.out.println("--- DEBUG LOGIN START ---");
-    System.out.println("Testing username: '" + username + "'");
-    System.out.println("Testing password: '" + password + "'");
+                 "created_at, last_login FROM User WHERE username = ? AND is_active = TRUE";
 
     try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -28,27 +23,10 @@ public User login(String username, String password) {
 
         try (ResultSet rs = pstmt.executeQuery()) {
             if (rs.next()) {
-                System.out.println("DEBUG: User found in database!");
-
                 String dbHash = rs.getString("password");
-                boolean isActive = rs.getBoolean("is_active");
-                
-                System.out.println("DEBUG: DB Hash: " + dbHash);
-                System.out.println("DEBUG: Is Active: " + isActive);
 
-                // Check 1: Is user active?
-                if (!isActive) {
-                    System.err.println("LOGIN FAIL: User exists but is_active is false");
-                    return null;
-                }
-
-                // Check 2: Does password match?
-                boolean passwordMatch = BCrypt.checkpw(password, dbHash);
-                System.out.println("DEBUG: Password Match Result: " + passwordMatch);
-
-                if (passwordMatch) {
-                    System.out.println("LOGIN SUCCESS: Credentials valid.");
-                    
+                // Check password match
+                if (BCrypt.checkpw(password, dbHash)) {
                     User user = new User(
                         rs.getInt("user_id"),
                         rs.getString("username"),
@@ -64,18 +42,13 @@ public User login(String username, String password) {
                     );
                     updateLastLogin(user.getUserId());
                     return user;
-                } else {
-                    System.err.println("LOGIN FAIL: Password hash mismatch.");
                 }
-            } else {
-                System.err.println("LOGIN FAIL: Username '" + username + "' not found in database.");
             }
         }
     } catch (SQLException e) {
-        System.err.println("ERROR: Database error during login");
+        System.err.println("Error during login:");
         e.printStackTrace();
     }
-    System.out.println("--- DEBUG LOGIN END ---");
     return null;
 }
 
@@ -99,7 +72,7 @@ public User login(String username, String password) {
         return BCrypt.checkpw(plainTextPassword, hashedPassword);
     }
 
-    public boolean createUser(User user) {
+    public boolean createUser(User user) throws SQLException {
         String sql = "INSERT INTO User (username, password, role, full_name, email, is_active) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -117,7 +90,8 @@ public User login(String username, String password) {
         } catch (SQLException e) {
             System.err.println("Error creating user:");
             e.printStackTrace();
-            return false;
+            // Re-throw to allow caller to handle specific error cases
+            throw e;
         }
     }
 
