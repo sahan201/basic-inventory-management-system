@@ -88,21 +88,34 @@ public class RegisterController {
         newUser.setActive(true); // Active by default
 
         // Attempt to create user
-        if (userDAO.createUser(newUser)) {
-            showSuccess("Account created successfully! Redirecting to login...");
+        // Attempt to create user
+        try {
+            if (userDAO.createUser(newUser)) {
+                showSuccess("Account created successfully! Redirecting to login...");
 
-            // Wait 2 seconds then navigate to login
-            new Thread(() -> {
-                try {
-                    Thread.sleep(2000);
-                    javafx.application.Platform.runLater(this::handleBackToLogin);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+                // Wait 2 seconds then navigate to login
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(2000);
+                        javafx.application.Platform.runLater(this::handleBackToLogin);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
 
-        } else {
-            showError("Failed to create account. Username may already exist.");
+            } else {
+                showError("Failed to create account. Please try again.");
+            }
+        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+            showError("Username '" + username + "' already exists. Please choose a different username.");
+        } catch (java.sql.SQLException e) {
+            // Check for MySQL duplicate entry error code (1062)
+            if (e.getErrorCode() == 1062) {
+                showError("Username '" + username + "' already exists. Please choose a different username.");
+            } else {
+                showError("Database error: " + e.getMessage());
+            }
+            e.printStackTrace();
         }
     }
 
