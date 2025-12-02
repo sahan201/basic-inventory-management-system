@@ -20,9 +20,6 @@ public class DatabaseConnection {
     private static final String DATABASE_PASSWORD;
     private static final String FULL_URL;
 
-    // Singleton instance
-    private static Connection connection = null;
-
     // Static block to load database configuration from properties file
     static {
         Properties props = new Properties();
@@ -59,23 +56,27 @@ public class DatabaseConnection {
     }
 
     /**
-     * Returns a database connection
-     * Creates a new connection if one doesn't exist
+     * Returns a new database connection
+     * Creates a fresh connection for each call to work properly with try-with-resources
+     *
+     * NOTE: The Singleton pattern was removed because DAOs use try-with-resources,
+     * which automatically closes connections. This was causing the singleton connection
+     * to be closed and reopened on every query, defeating the purpose.
+     *
+     * For production use, consider implementing a proper connection pool (e.g., HikariCP)
+     * instead of creating new connections on every call.
      *
      * @return Connection object or null if connection fails
      */
     public static Connection getConnection() {
         try {
-            // Check if connection is null or closed
-            if (connection == null || connection.isClosed()) {
-                // Load MySQL JDBC Driver (optional for newer JDBC versions)
-                Class.forName("com.mysql.cj.jdbc.Driver");
+            // Load MySQL JDBC Driver (optional for newer JDBC versions)
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-                // Establish connection using DriverManager
-                connection = DriverManager.getConnection(FULL_URL, DATABASE_USER, DATABASE_PASSWORD);
+            // Establish connection using DriverManager
+            Connection conn = DriverManager.getConnection(FULL_URL, DATABASE_USER, DATABASE_PASSWORD);
 
-                System.out.println("Database connection established successfully!");
-            }
+            return conn;
         } catch (ClassNotFoundException e) {
             System.err.println("MySQL JDBC Driver not found!");
             System.err.println("Make sure mysql-connector-java is in your classpath.");
@@ -86,7 +87,7 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
 
-        return connection;
+        return null;
     }
 
     /**
@@ -106,28 +107,12 @@ public class DatabaseConnection {
     }
 
     /**
-     * Closes the database connection
-     */
-    public static void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-                System.out.println("Database connection closed.");
-            } catch (SQLException e) {
-                System.err.println("Error closing connection: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
      * Tests if the connection is valid
      *
      * @return true if connection is valid, false otherwise
      */
     public static boolean testConnection() {
-        try {
-            Connection conn = getConnection();
+        try (Connection conn = getConnection()) {
             return conn != null && !conn.isClosed();
         } catch (SQLException e) {
             return false;

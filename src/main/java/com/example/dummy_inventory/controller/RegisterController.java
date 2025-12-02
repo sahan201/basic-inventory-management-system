@@ -84,6 +84,14 @@ public class RegisterController {
         newUser.setPassword(password);
         newUser.setFullName(fullName);
         newUser.setEmail(email);
+
+        // IMPORTANT: Self-registered users are assigned the USER role by default
+        // This means they will have LIMITED ACCESS and may see "Access Denied" errors
+        // when attempting to access features like:
+        // - User Management (ADMIN only)
+        // - Reports (MANAGER/ADMIN only)
+        // - Product Management (MANAGER/ADMIN only)
+        // An existing ADMIN user must upgrade their role via User Management for full access.
         newUser.setRole(User.Role.USER); // Default role for self-registration
         newUser.setActive(true); // Active by default
 
