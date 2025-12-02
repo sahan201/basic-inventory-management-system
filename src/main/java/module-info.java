@@ -15,7 +15,10 @@ module com.example.dummy_inventory {
     requires com.opencsv;
 
     // Allow access to unnamed modules (jbcrypt, opencsv, apache poi)
-    requires jbcrypt;
+    // NOTE: jbcrypt is commented out because org.mindrot:jbcrypt:0.4 is not a proper Java module
+    // and does not expose a module name. The --add-reads compiler flag handles this instead.
+    // See pom.xml: <arg>--add-reads</arg> <arg>com.example.dummy_inventory=ALL-UNNAMED</arg>
+    // requires jbcrypt;
 
     requires org.apache.poi.poi;
 

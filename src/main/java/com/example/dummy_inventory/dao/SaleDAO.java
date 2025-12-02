@@ -90,6 +90,14 @@ public class SaleDAO {
                 e.printStackTrace();
                 conn.rollback();
                 return false;
+            } finally {
+                // Restore autocommit to default state before connection is closed
+                try {
+                    conn.setAutoCommit(true);
+                } catch (SQLException e) {
+                    System.err.println("Error restoring autocommit:");
+                    e.printStackTrace();
+                }
             }
 
         } catch (SQLException e) {
@@ -224,6 +232,14 @@ public class SaleDAO {
                 e.printStackTrace();
                 conn.rollback();
                 return false;
+            } finally {
+                // Restore autocommit to default state before connection is closed
+                try {
+                    conn.setAutoCommit(true);
+                } catch (SQLException e) {
+                    System.err.println("Error restoring autocommit:");
+                    e.printStackTrace();
+                }
             }
 
         } catch (SQLException e) {

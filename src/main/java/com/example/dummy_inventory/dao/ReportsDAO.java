@@ -12,12 +12,13 @@ public class ReportsDAO {
     // Sales Reports
     
     public double getTotalRevenue() {
-        String sql = "SELECT SUM(s.quantity_sold * s.unit_price) AS total_revenue FROM Sale s";
-        
+        // Use persisted total_amount for consistency with Sale records
+        String sql = "SELECT SUM(s.total_amount) AS total_revenue FROM Sale s";
+
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-            
+
             if (rs.next()) {
                 return rs.getDouble("total_revenue");
             }
@@ -25,19 +26,20 @@ public class ReportsDAO {
             System.err.println("Error getting total revenue:");
             e.printStackTrace();
         }
-        
+
         return 0.0;
     }
     
     public double getRevenueByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
-        String sql = "SELECT SUM(s.quantity_sold * s.unit_price) AS revenue FROM Sale s WHERE s.sale_date BETWEEN ? AND ?";
-        
+        // Use persisted total_amount for consistency with Sale records
+        String sql = "SELECT SUM(s.total_amount) AS revenue FROM Sale s WHERE s.sale_date BETWEEN ? AND ?";
+
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
+
             pstmt.setTimestamp(1, Timestamp.valueOf(startDate));
             pstmt.setTimestamp(2, Timestamp.valueOf(endDate));
-            
+
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getDouble("revenue");
@@ -47,7 +49,7 @@ public class ReportsDAO {
             System.err.println("Error getting revenue by date range:");
             e.printStackTrace();
         }
-        
+
         return 0.0;
     }
     
