@@ -102,13 +102,20 @@ mysql -u root -p < database_schema.sql
 
 ### Step 2: Configure Database Connection
 
-Edit `src/main/java/com/example/dummy_inventory/db/DatabaseConnection.java`:
+**IMPORTANT**: The application uses `database.properties` file for configuration.
 
-```java
-private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/inventory_management";
-private static final String DATABASE_USER = "your_username";
-private static final String DATABASE_PASSWORD = "your_password";
+1. Navigate to `src/main/resources/`
+2. Copy `database.properties.template` to `database.properties`
+3. Edit `database.properties` and update your MySQL credentials:
+
+```properties
+db.url=jdbc:mysql://localhost:3306/inventory_management
+db.user=root
+db.password=YOUR_MYSQL_PASSWORD
+db.connection.params=?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
 ```
+
+**Note**: The `database.properties` file is in `.gitignore` for security and will not be committed to version control.
 
 ### Step 3: Build and Run
 
@@ -288,16 +295,22 @@ basic-inventory-management-system/
 ## Troubleshooting
 
 ### Database Connection Failed
-- Verify MySQL is running
-- Check database credentials
-- Ensure `inventory_management` database exists
+- **Check if `database.properties` exists** in `src/main/resources/`
+  - If missing, copy from `database.properties.template`
+- Verify MySQL is running: `sudo service mysql status` or `systemctl status mysql`
+- Check database credentials in `database.properties`
+- Ensure `inventory_management` database exists: Run `database_schema.sql`
 - Check port 3306 is not blocked
+- Verify MySQL user has proper permissions
 
 ### Login Not Working
-- Verify user exists in database
-- Password is `admin123` for default users
-- Check user `is_active` status
+- **Most Common Issue**: Missing or misconfigured `database.properties` file
+  - Solution: Create `src/main/resources/database.properties` from template
+- Verify user exists in database: Check `User` table
+- Password is `admin123` for default users (admin, manager, user)
+- Check user `is_active` status is `TRUE` in database
 - Review console for error messages
+- Test database connection: Run `DatabaseConnection.main()` to test connection
 
 ### Application Won't Start
 - Check Java version (must be 9+)
