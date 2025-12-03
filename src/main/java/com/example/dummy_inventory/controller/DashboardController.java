@@ -18,6 +18,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Controller for the main Dashboard view
@@ -322,51 +326,57 @@ public class DashboardController {
     }
 
     /**
-     * Sets the active navigation tab style
+     * Safely get all navigation buttons, filtering out null values
+     * FIXED: Added null safety for buttons that may not be injected from FXML
+     */
+    private List<Button> getNavigationButtons() {
+        return Stream.of(btnDashboard, btnProducts, btnCategories, btnSuppliers, btnSales, btnUsers, btnReports)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Sets the active navigation tab style with null safety
+     * FIXED: Uses getNavigationButtons() to avoid NPE
      *
      * @param activeButton The button to mark as active
      */
     private void setActiveTab(Button activeButton) {
-        // Reset all buttons
-        Button[] navButtons = {btnDashboard, btnProducts, btnCategories, btnSuppliers, btnSales, btnUsers, btnReports};
+        String inactiveStyle = "-fx-background-color: transparent; -fx-text-fill: white; " +
+                "-fx-padding: 12 25; -fx-cursor: hand; " +
+                "-fx-border-width: 0 0 3 0; -fx-border-color: transparent;";
 
-        for (Button btn : navButtons) {
-            if (btn != null) {
-                btn.setStyle("-fx-background-color: transparent; -fx-text-fill: white; " +
-                        "-fx-padding: 12 25; -fx-cursor: hand; " +
-                        "-fx-border-width: 0 0 3 0; -fx-border-color: transparent;");
-            }
-        }
+        String activeStyle = "-fx-background-color: transparent; -fx-text-fill: white; " +
+                "-fx-padding: 12 25; -fx-cursor: hand; " +
+                "-fx-border-width: 0 0 3 0; -fx-border-color: #ffffff;";
+
+        // Reset all buttons safely
+        getNavigationButtons().forEach(btn -> btn.setStyle(inactiveStyle));
 
         // Highlight active button
         if (activeButton != null) {
-            activeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; " +
-                    "-fx-padding: 12 25; -fx-cursor: hand; " +
-                    "-fx-border-width: 0 0 3 0; -fx-border-color: #ffffff;");
+            activeButton.setStyle(activeStyle);
         }
     }
 
     /**
-     * Adds hover effects to navigation buttons
+     * Adds hover effects to navigation buttons with null safety
+     * FIXED: Uses getNavigationButtons() to avoid NPE
      */
     private void addNavButtonHoverEffects() {
-        Button[] navButtons = {btnDashboard, btnProducts, btnCategories, btnSuppliers, btnSales, btnUsers, btnReports};
+        getNavigationButtons().forEach(btn -> {
+            btn.setOnMouseEntered(e -> {
+                if (!btn.getStyle().contains("border-color: #ffffff")) { // Not active
+                    btn.setStyle(btn.getStyle() + "-fx-background-color: rgba(255,255,255,0.1);");
+                }
+            });
 
-        for (Button btn : navButtons) {
-            if (btn != null) {
-                btn.setOnMouseEntered(e -> {
-                    if (!btn.getStyle().contains("#ffffff")) { // Not active
-                        btn.setStyle(btn.getStyle() + "-fx-background-color: rgba(255,255,255,0.1);");
-                    }
-                });
-
-                btn.setOnMouseExited(e -> {
-                    if (!btn.getStyle().contains("border-color: #ffffff")) { // Not active
-                        btn.setStyle(btn.getStyle().replace("-fx-background-color: rgba(255,255,255,0.1);", ""));
-                    }
-                });
-            }
-        }
+            btn.setOnMouseExited(e -> {
+                if (!btn.getStyle().contains("border-color: #ffffff")) { // Not active
+                    btn.setStyle(btn.getStyle().replace("-fx-background-color: rgba(255,255,255,0.1);", ""));
+                }
+            });
+        });
     }
 
     /**

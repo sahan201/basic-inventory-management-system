@@ -1,0 +1,465 @@
+/*
+ * Inventory Management System - Main Stylesheet
+ * Provides consistent styling across all views
+ */
+
+/* ============================================
+   ROOT VARIABLES (for easy theming)
+   ============================================ */
+.root {
+    -fx-primary-color: #667eea;
+    -fx-primary-dark: #5568d3;
+    -fx-primary-light: #764ba2;
+    -fx-success-color: #27ae60;
+    -fx-warning-color: #f39c12;
+    -fx-danger-color: #e74c3c;
+    -fx-info-color: #3498db;
+    -fx-text-primary: #333333;
+    -fx-text-secondary: #666666;
+    -fx-text-muted: #888888;
+    -fx-bg-primary: #f5f5f5;
+    -fx-bg-card: white;
+    -fx-border-color: #dddddd;
+}
+
+/* ============================================
+   COMMON COMPONENTS
+   ============================================ */
+
+/* Buttons - Base */
+.button {
+    -fx-background-radius: 8;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+/* Primary Button */
+.btn-primary {
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: white;
+}
+
+.btn-primary:hover {
+    -fx-background-color: -fx-primary-dark;
+}
+
+.btn-primary:pressed {
+    -fx-background-color: #4556b8;
+}
+
+.btn-primary:disabled {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #888888;
+}
+
+/* Success Button */
+.btn-success {
+    -fx-background-color: -fx-success-color;
+    -fx-text-fill: white;
+}
+
+.btn-success:hover {
+    -fx-background-color: #219a52;
+}
+
+/* Warning Button */
+.btn-warning {
+    -fx-background-color: -fx-warning-color;
+    -fx-text-fill: white;
+}
+
+.btn-warning:hover {
+    -fx-background-color: #e08e0b;
+}
+
+/* Danger Button */
+.btn-danger {
+    -fx-background-color: -fx-danger-color;
+    -fx-text-fill: white;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #c0392b;
+}
+
+/* Info Button */
+.btn-info {
+    -fx-background-color: -fx-info-color;
+    -fx-text-fill: white;
+}
+
+.btn-info:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Secondary Button */
+.btn-secondary {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #7f8c8d;
+}
+
+/* ============================================
+   TEXT FIELDS & INPUTS
+   ============================================ */
+
+.text-field, .password-field, .text-area {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: -fx-border-color;
+    -fx-border-width: 1;
+    -fx-padding: 10;
+    -fx-font-size: 13px;
+}
+
+.text-field:focused, .password-field:focused, .text-area:focused {
+    -fx-border-color: -fx-primary-color;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.3), 5, 0, 0, 0);
+}
+
+.text-field:disabled, .password-field:disabled {
+    -fx-background-color: #f0f0f0;
+    -fx-text-fill: #888888;
+}
+
+/* Search Field */
+.search-field {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-padding: 8 15 8 35;
+}
+
+/* ============================================
+   COMBO BOX
+   ============================================ */
+
+.combo-box {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -fx-border-color;
+}
+
+.combo-box:focused {
+    -fx-border-color: -fx-primary-color;
+}
+
+.combo-box .list-cell {
+    -fx-padding: 8;
+}
+
+/* ============================================
+   TABLE VIEW
+   ============================================ */
+
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+.table-view .column-header {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 10;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell {
+    -fx-padding: 8;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: rgba(102, 126, 234, 0.2);
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #f8f9fa;
+}
+
+/* Low Stock Indicator */
+.low-stock {
+    -fx-text-fill: -fx-danger-color;
+    -fx-font-weight: bold;
+}
+
+/* ============================================
+   CARDS & PANELS
+   ============================================ */
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.card-stat {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-alignment: center;
+}
+
+.stat-value {
+    -fx-font-size: 36;
+    -fx-font-weight: bold;
+}
+
+.stat-value-primary {
+    -fx-text-fill: -fx-primary-color;
+}
+
+.stat-value-success {
+    -fx-text-fill: -fx-success-color;
+}
+
+.stat-value-warning {
+    -fx-text-fill: -fx-warning-color;
+}
+
+.stat-value-info {
+    -fx-text-fill: -fx-info-color;
+}
+
+.stat-value-danger {
+    -fx-text-fill: -fx-danger-color;
+}
+
+.stat-label {
+    -fx-font-size: 14;
+    -fx-text-fill: -fx-text-secondary;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.nav-bar {
+    -fx-background-color: #5568d3;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 12 25;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-border-width: 0 0 3 0;
+    -fx-border-color: transparent;
+}
+
+.nav-button:hover {
+    -fx-background-color: rgba(255,255,255,0.1);
+}
+
+.nav-button.active {
+    -fx-border-color: white;
+}
+
+/* ============================================
+   HEADER BAR
+   ============================================ */
+
+.header-bar {
+    -fx-background-color: linear-gradient(to right, -fx-primary-color, -fx-primary-light);
+    -fx-padding: 15 20;
+}
+
+.header-title {
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.welcome-label {
+    -fx-font-size: 14;
+    -fx-text-fill: white;
+}
+
+/* ============================================
+   STATUS BAR
+   ============================================ */
+
+.status-bar {
+    -fx-background-color: #34495e;
+    -fx-padding: 10 20;
+}
+
+.status-text {
+    -fx-text-fill: white;
+    -fx-font-size: 12;
+}
+
+/* ============================================
+   LABELS
+   ============================================ */
+
+.label-title {
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.label-subtitle {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.label-muted {
+    -fx-text-fill: -fx-text-muted;
+    -fx-font-size: 12;
+}
+
+.label-success {
+    -fx-text-fill: -fx-success-color;
+    -fx-font-weight: bold;
+}
+
+.label-error {
+    -fx-text-fill: -fx-danger-color;
+    -fx-font-weight: bold;
+}
+
+.label-warning {
+    -fx-text-fill: -fx-warning-color;
+    -fx-font-weight: bold;
+}
+
+/* ============================================
+   FORMS
+   ============================================ */
+
+.form-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 12;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.form-group {
+    -fx-spacing: 5;
+}
+
+/* ============================================
+   TIPS BOX
+   ============================================ */
+
+.tips-box {
+    -fx-background-color: #ecf0f1;
+    -fx-background-radius: 5;
+    -fx-padding: 10;
+}
+
+.tips-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 12;
+}
+
+.tips-item {
+    -fx-font-size: 11;
+}
+
+/* ============================================
+   ALERTS & NOTIFICATIONS
+   ============================================ */
+
+.alert-success {
+    -fx-background-color: #d4edda;
+    -fx-border-color: #c3e6cb;
+    -fx-text-fill: #155724;
+}
+
+.alert-error {
+    -fx-background-color: #f8d7da;
+    -fx-border-color: #f5c6cb;
+    -fx-text-fill: #721c24;
+}
+
+.alert-warning {
+    -fx-background-color: #fff3cd;
+    -fx-border-color: #ffeeba;
+    -fx-text-fill: #856404;
+}
+
+.alert-info {
+    -fx-background-color: #d1ecf1;
+    -fx-border-color: #bee5eb;
+    -fx-text-fill: #0c5460;
+}
+
+/* ============================================
+   LOGIN VIEW
+   ============================================ */
+
+.login-background {
+    -fx-background-color: linear-gradient(to bottom, -fx-primary-color 0%, -fx-primary-light 100%);
+}
+
+.login-card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-padding: 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0, 0, 5);
+}
+
+.login-title {
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary-color;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 5;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #aaaaaa;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: #f0f0f0;
+}
+
+/* ============================================
+   SEPARATOR
+   ============================================ */
+
+.separator .line {
+    -fx-border-color: #eeeeee;
+    -fx-border-width: 1 0 0 0;
+}
+
+/* ============================================
+   CHECK BOX
+   ============================================ */
+
+.check-box {
+    -fx-font-weight: normal;
+}
+
+.check-box:selected .box {
+    -fx-background-color: -fx-primary-color;
+    -fx-border-color: -fx-primary-color;
+}
+
+/* ============================================
+   PROGRESS INDICATOR
+   ============================================ */
+
+.progress-indicator {
+    -fx-padding: 20;
+}
+
+.progress-indicator .arc {
+    -fx-stroke: -fx-primary-color;
+}

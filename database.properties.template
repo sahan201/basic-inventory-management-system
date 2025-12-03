@@ -1,0 +1,25 @@
+# Database Configuration Template
+# Copy this file to src/main/resources/database.properties
+# and update with your actual credentials
+
+# Database connection URL
+# Format: jdbc:mysql://hostname:port/database_name
+db.url=jdbc:mysql://localhost:3306/inventory_management
+
+# Database credentials
+db.user=root
+db.password=your_password_here
+
+# Connection parameters (optional but recommended)
+# useSSL=false: Disable SSL for local development
+# serverTimezone=UTC: Set server timezone
+# allowPublicKeyRetrieval=true: Required for MySQL 8.0+ with caching_sha2_password
+db.connection.params=?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+
+# Instructions:
+# 1. Copy this file to: src/main/resources/database.properties
+# 2. Update db.url with your database name
+# 3. Update db.user with your MySQL username
+# 4. Update db.password with your MySQL password
+# 5. Make sure database.properties is in .gitignore (it should be already)
+# 6. Run the database_schema.sql script to create the database structure

@@ -2,6 +2,10 @@ package com.example.dummy_inventory.controller;
 
 import com.example.dummy_inventory.dao.UserDAO;
 import com.example.dummy_inventory.model.User;
+import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +16,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.application.Platform;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -63,6 +67,7 @@ public class LoginController {
 
     /**
      * Handles login button click and Enter key on password field
+     * FIXED: Uses Task and PauseTransition instead of Thread.sleep() to avoid blocking UI
      */
     @FXML
     protected void handleLogin() {
@@ -81,36 +86,46 @@ public class LoginController {
         loginButton.setDisable(true);
         setStatusMessage("Logging in...", Color.web("#3498db"));
 
-        // Perform login validation in background to keep UI responsive
-        new Thread(() -> {
-            User user = validateLogin(username, password);
+        // Use Task for proper background execution (FIXED from Thread)
+        Task<User> loginTask = new Task<>() {
+            @Override
+            protected User call() {
+                return validateLogin(username, password);
+            }
+        };
 
-            // Update UI on JavaFX Application Thread
-            Platform.runLater(() -> {
-                loginButton.setDisable(false);
+        loginTask.setOnSucceeded(event -> {
+            User user = loginTask.getValue();
+            loginButton.setDisable(false);
 
-                if (user != null) {
-                    currentUser = user;
-                    setStatusMessage("✓ Login Successful!", Color.web("#27ae60"));
+            if (user != null) {
+                currentUser = user;
+                setStatusMessage("✓ Login Successful!", Color.web("#27ae60"));
 
-                    // Wait a moment before transitioning
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                // FIXED: Use PauseTransition instead of Thread.sleep - NON-BLOCKING!
+                PauseTransition pause = new PauseTransition(Duration.millis(500));
+                pause.setOnFinished(e -> openDashboard());
+                pause.play();
+            } else {
+                setStatusMessage("✗ Invalid username or password.", Color.web("#e74c3c"));
+                shakeLoginButton();
 
-                    // Navigate to dashboard
-                    openDashboard();
-                } else {
-                    setStatusMessage("✗ Invalid username or password.", Color.web("#e74c3c"));
-                    shakeLoginButton();
+                // Clear password field for security
+                passwordField.clear();
+            }
+        });
 
-                    // Clear password field for security
-                    passwordField.clear();
-                }
-            });
-        }).start();
+        loginTask.setOnFailed(event -> {
+            loginButton.setDisable(false);
+            Throwable exception = loginTask.getException();
+            setStatusMessage("⚠ Login error: " + exception.getMessage(), Color.web("#e74c3c"));
+            exception.printStackTrace();
+        });
+
+        // Execute on background thread
+        Thread loginThread = new Thread(loginTask);
+        loginThread.setDaemon(true);
+        loginThread.start();
     }
 
     /**
@@ -171,22 +186,15 @@ public class LoginController {
 
     /**
      * Adds a shake animation to the login button for visual feedback
+     * FIXED: Uses JavaFX TranslateTransition instead of Thread.sleep()
      */
     private void shakeLoginButton() {
-        // Simple shake effect using translate
-        new Thread(() -> {
-            try {
-                for (int i = 0; i < 3; i++) {
-                    Platform.runLater(() -> loginButton.setTranslateX(5));
-                    Thread.sleep(50);
-                    Platform.runLater(() -> loginButton.setTranslateX(-5));
-                    Thread.sleep(50);
-                }
-                Platform.runLater(() -> loginButton.setTranslateX(0));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        // Use JavaFX animation instead of Thread manipulation
+        TranslateTransition shake = new TranslateTransition(Duration.millis(50), loginButton);
+        shake.setCycleCount(6);
+        shake.setAutoReverse(true);
+        shake.setByX(5);
+        shake.play();
     }
 
     /**
