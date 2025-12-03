@@ -2,6 +2,8 @@ package com.example.dummy_inventory.controller;
 
 import com.example.dummy_inventory.dao.UserDAO;
 import com.example.dummy_inventory.model.User;
+import javafx.animation.PauseTransition;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,8 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Controller for user registration
@@ -55,6 +59,7 @@ public class RegisterController {
 
     /**
      * Handle registration button click
+     * FIXED: Uses Task and PauseTransition instead of Thread.sleep() to avoid blocking
      */
     @FXML
     private void handleRegister() {
@@ -72,59 +77,82 @@ public class RegisterController {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
 
-        // Check if username already exists
-        if (userDAO.getUserByUsername(username) != null) {
-            showError("Username already exists. Please choose a different username.");
-            return;
-        }
+        // Disable form during registration
+        setFormDisabled(true);
+        showInfo("Creating account...");
 
-        // Create new user with USER role (self-registered users get basic role)
-        User newUser = new User();
-        newUser.setUsername(username);
-        newUser.setPassword(password);
-        newUser.setFullName(fullName);
-        newUser.setEmail(email);
+        // Use Task for database operation (FIXED from raw Thread)
+        Task<Boolean> registerTask = new Task<>() {
+            @Override
+            protected Boolean call() throws SQLException {
+                // Check if username exists
+                if (userDAO.getUserByUsername(username) != null) {
+                    throw new SQLException("Username already exists");
+                }
 
-        // IMPORTANT: Self-registered users are assigned the USER role by default
-        // This means they will have LIMITED ACCESS and may see "Access Denied" errors
-        // when attempting to access features like:
-        // - User Management (ADMIN only)
-        // - Reports (MANAGER/ADMIN only)
-        // - Product Management (MANAGER/ADMIN only)
-        // An existing ADMIN user must upgrade their role via User Management for full access.
-        newUser.setRole(User.Role.USER); // Default role for self-registration
-        newUser.setActive(true); // Active by default
+                // Create new user with USER role (self-registered users get basic role)
+                User newUser = new User();
+                newUser.setUsername(username);
+                newUser.setPassword(password);
+                newUser.setFullName(fullName);
+                newUser.setEmail(email);
+                newUser.setRole(User.Role.USER); // Default role for self-registration
+                newUser.setActive(true); // Active by default
 
-        // Attempt to create user
-        // Attempt to create user
-        try {
-            if (userDAO.createUser(newUser)) {
+                return userDAO.createUser(newUser);
+            }
+        };
+
+        registerTask.setOnSucceeded(event -> {
+            setFormDisabled(false);
+            if (registerTask.getValue()) {
                 showSuccess("Account created successfully! Redirecting to login...");
 
-                // Wait 2 seconds then navigate to login
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(2000);
-                        javafx.application.Platform.runLater(this::handleBackToLogin);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-
+                // FIXED: Use PauseTransition instead of Thread.sleep - proper JavaFX way
+                PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                pause.setOnFinished(e -> handleBackToLogin());
+                pause.play();
             } else {
                 showError("Failed to create account. Please try again.");
             }
-        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
-            showError("Username '" + username + "' already exists. Please choose a different username.");
-        } catch (java.sql.SQLException e) {
-            // Check for MySQL duplicate entry error code (1062)
-            if (e.getErrorCode() == 1062) {
+        });
+
+        registerTask.setOnFailed(event -> {
+            setFormDisabled(false);
+            Throwable ex = registerTask.getException();
+            if (ex.getMessage() != null && ex.getMessage().contains("already exists")) {
+                showError("Username '" + username + "' already exists. Please choose a different username.");
+            } else if (ex instanceof SQLException && ((SQLException)ex).getErrorCode() == 1062) {
                 showError("Username '" + username + "' already exists. Please choose a different username.");
             } else {
-                showError("Database error: " + e.getMessage());
+                showError("Database error: " + ex.getMessage());
             }
-            e.printStackTrace();
-        }
+        });
+
+        // Execute on background thread
+        Thread thread = new Thread(registerTask);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    /**
+     * Enable or disable all form fields
+     */
+    private void setFormDisabled(boolean disabled) {
+        usernameField.setDisable(disabled);
+        fullNameField.setDisable(disabled);
+        emailField.setDisable(disabled);
+        passwordField.setDisable(disabled);
+        confirmPasswordField.setDisable(disabled);
+        registerButton.setDisable(disabled);
+    }
+
+    /**
+     * Display info message
+     */
+    private void showInfo(String message) {
+        statusLabel.setText(message);
+        statusLabel.setTextFill(Color.BLUE);
     }
 
     /**
