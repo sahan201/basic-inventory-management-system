@@ -1,170 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.*?>
 
-<VBox
-        fx:controller="com.example.dummy_inventory.controller.ReportsController"
-        xmlns:fx="http://javafx.com/fxml/1"
-        xmlns="http://javafx.com/javafx/17"
-        spacing="15"
-        style="-fx-background-color: #f5f5f5;"
->
+<VBox spacing="15" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dummy_inventory.controller.ReportsController">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
 
     <!-- Header -->
     <HBox alignment="CENTER_LEFT" spacing="20">
-        <Label text="📊 Reports &amp; Analytics" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Button
-                text="🔄 Refresh"
-                onAction="#handleRefresh"
-                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;"
-        >
-            <font><Font name="System Bold" size="12"/></font>
+        <Label style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Reports &amp; Analytics" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#handleRefresh" style="-fx-background-color: #349 #2425258db; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;" text="🔄 Refresh">
+            <font><Font name="System Bold" size="12" /></font>
         </Button>
     </HBox>
 
     <!-- Dashboard Statistics -->
     <GridPane hgap="15" vgap="15">
         <!-- Row 1 -->
-        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.rowIndex="0" GridPane.columnIndex="0">
-            <Label text="💰 Total Revenue" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            <Label fx:id="totalRevenueLabel" text="\$0.00" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #27ae60;">
-                <font><Font name="System Bold" size="28"/></font>
+        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <Label style="-fx-font-size: 14; -fx-text-fill: #666;" text="Total Revenue" />
+            <Label fx:id="totalRevenueLabel" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #27ae60;" text="\$0.00">
+                <font><Font name="System Bold" size="28" /></font>
             </Label>
         </VBox>
 
-        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.rowIndex="0" GridPane.columnIndex="1">
-            <Label text="📦 Total Products" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            <Label fx:id="totalProductsLabel" text="0" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #3498db;">
-                <font><Font name="System Bold" size="28"/></font>
+        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <Label style="-fx-font-size: 14; -fx-text-fill: #666;" text="Total Products" />
+            <Label fx:id="totalProductsLabel" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #3498db;" text="0">
+                <font><Font name="System Bold" size="28" /></font>
             </Label>
         </VBox>
 
-        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.rowIndex="0" GridPane.columnIndex="2">
-            <Label text="📁 Total Categories" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            <Label fx:id="totalCategoriesLabel" text="0" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #9b59b6;">
-                <font><Font name="System Bold" size="28"/></font>
+        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.columnIndex="2" GridPane.rowIndex="0">
+            <Label style="-fx-font-size: 14; -fx-text-fill: #666;" text="Total Categories" />
+            <Label fx:id="totalCategoriesLabel" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #9b59b6;" text="0">
+                <font><Font name="System Bold" size="28" /></font>
             </Label>
         </VBox>
 
         <!-- Row 2 -->
-        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.rowIndex="1" GridPane.columnIndex="0">
-            <Label text="⚠️ Low Stock Items" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            <Label fx:id="lowStockCountLabel" text="0" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #e74c3c;">
-                <font><Font name="System Bold" size="28"/></font>
+        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <Label style="-fx-font-size: 14; -fx-text-fill: #666;" text="Low Stock Items" />
+            <Label fx:id="lowStockCountLabel" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" text="0">
+                <font><Font name="System Bold" size="28" /></font>
             </Label>
         </VBox>
 
-        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.rowIndex="1" GridPane.columnIndex="1">
-            <Label text="💎 Inventory Value" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            <Label fx:id="inventoryValueLabel" text="\$0.00" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #f39c12;">
-                <font><Font name="System Bold" size="28"/></font>
+        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label style="-fx-font-size: 14; -fx-text-fill: #666;" text="Inventory Value" />
+            <Label fx:id="inventoryValueLabel" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #f39c12;" text="\$0.00">
+                <font><Font name="System Bold" size="28" /></font>
             </Label>
         </VBox>
 
-        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.rowIndex="1" GridPane.columnIndex="2">
-            <Label text="📈 Total Profit" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            <Label fx:id="totalProfitLabel" text="\$0.00" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #16a085;">
-                <font><Font name="System Bold" size="28"/></font>
+        <VBox spacing="5" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Label style="-fx-font-size: 14; -fx-text-fill: #666;" text="Total Profit" />
+            <Label fx:id="totalProfitLabel" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #16a085;" text="\$0.00">
+                <font><Font name="System Bold" size="28" /></font>
             </Label>
         </VBox>
 
         <columnConstraints>
-            <ColumnConstraints percentWidth="33.33" hgrow="ALWAYS"/>
-            <ColumnConstraints percentWidth="33.33" hgrow="ALWAYS"/>
-            <ColumnConstraints percentWidth="33.33" hgrow="ALWAYS"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
         </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
     </GridPane>
 
     <!-- Report Generation Section -->
     <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20;" VBox.vgrow="ALWAYS">
-        <Label text="Generate Reports" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+        <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Generate Reports" />
 
-        <Separator/>
+        <Separator />
 
         <!-- Report Options -->
-        <HBox spacing="15" alignment="CENTER_LEFT">
+        <HBox alignment="CENTER_LEFT" spacing="15">
             <VBox spacing="5">
-                <Label text="Report Type:" style="-fx-font-weight: bold;"/>
-                <ComboBox
-                        fx:id="reportTypeComboBox"
-                        promptText="Select report type"
-                        prefWidth="250"
-                        style="-fx-background-radius: 5;"
-                />
+                <Label style="-fx-font-weight: bold;" text="Report Type:" />
+                <ComboBox fx:id="reportTypeComboBox" prefWidth="250" promptText="Select report type" style="-fx-background-radius: 5;" />
             </VBox>
 
             <VBox spacing="5">
-                <Label text="Start Date:" style="-fx-font-weight: bold;"/>
-                <DatePicker
-                        fx:id="startDatePicker"
-                        promptText="Select start date"
-                        prefWidth="150"
-                        style="-fx-background-radius: 5;"
-                />
+                <Label style="-fx-font-weight: bold;" text="Start Date:" />
+                <DatePicker fx:id="startDatePicker" prefWidth="150" promptText="Select start date" style="-fx-background-radius: 5;" />
             </VBox>
 
             <VBox spacing="5">
-                <Label text="End Date:" style="-fx-font-weight: bold;"/>
-                <DatePicker
-                        fx:id="endDatePicker"
-                        promptText="Select end date"
-                        prefWidth="150"
-                        style="-fx-background-radius: 5;"
-                />
+                <Label style="-fx-font-weight: bold;" text="End Date:" />
+                <DatePicker fx:id="endDatePicker" prefWidth="150" promptText="Select end date" style="-fx-background-radius: 5;" />
             </VBox>
 
-            <Region HBox.hgrow="ALWAYS"/>
+            <Region HBox.hgrow="ALWAYS" />
 
-            <Button
-                    text="📊 Generate Report"
-                    onAction="#handleGenerateReport"
-                    style="-fx-background-color: #667eea; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 12 25; -fx-cursor: hand;"
-            >
-                <font><Font name="System Bold" size="13"/></font>
+            <Button onAction="#handleGenerateReport" style="-fx-background-color: #242525; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 12 25; -fx-cursor: hand;" text="📊 Generate Report">
+                <font><Font name="System Bold" size="13" /></font>
             </Button>
         </HBox>
 
         <!-- Report Display Area -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label text="Report Output:" style="-fx-font-weight: bold;"/>
-            <TextArea
-                    fx:id="reportTextArea"
-                    editable="false"
-                    wrapText="false"
-                    style="-fx-font-family: 'Courier New'; -fx-font-size: 12; -fx-background-radius: 5;"
-                    VBox.vgrow="ALWAYS"
-            />
+            <Label style="-fx-font-weight: bold;" text="Report Output:" />
+            <TextArea fx:id="reportTextArea" editable="false" style="-fx-font-family: 'Courier New'; -fx-font-size: 12; -fx-background-radius: 5;" wrapText="false" VBox.vgrow="ALWAYS" />
         </VBox>
 
         <!-- Export Actions -->
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <Button
-                    text="📥 Export Products"
-                    onAction="#handleExportProducts"
-                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"
-            >
-                <font><Font name="System Bold" size="12"/></font>
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Button onAction="#handleExportProducts" style="-fx-background-color: #018786; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;" text="Export Products">
+                <font><Font name="System Bold" size="12" /></font>
             </Button>
-            <Button
-                    text="📥 Export Sales"
-                    onAction="#handleExportSales"
-                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;"
-            >
-                <font><Font name="System Bold" size="12"/></font>
+            <Button onAction="#handleExportSales" style="-fx-background-color: #242525; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;" text="Export Sales">
+                <font><Font name="System Bold" size="12" /></font>
             </Button>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label
-                    fx:id="statusLabel"
-                    text=""
-                    style="-fx-font-weight: bold; -fx-font-size: 12;"
-            />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="statusLabel" style="-fx-font-weight: bold; -fx-font-size: 12;" text="" />
         </HBox>
     </VBox>
 </VBox>

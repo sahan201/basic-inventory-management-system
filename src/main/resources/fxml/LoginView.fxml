@@ -1,262 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 
-<VBox
-        fx:controller="com.example.dummy_inventory.controller.LoginController"
-        xmlns:fx="http://javafx.com/fxml/1"
-        xmlns="http://javafx.com/javafx/17"
-        alignment="CENTER"
-        spacing="20"
-        prefWidth="400"
-        prefHeight="500"
-        style="-fx-background-color: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);"
->
-    <padding>
-        <Insets top="40" right="40" bottom="40" left="40" />
-    </padding>
+<StackPane prefHeight="700" prefWidth="1200" style="-fx-background-color: #0a0f19; -fx-background-image: url('images/img.png'); -fx-background-size: cover; -fx-background-position: center;" styleClass="login-background" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dummy_inventory.controller.LoginController">
+    <!-- Dark Overlay -->
+    <Rectangle height="700" style="-fx-fill: rgba(10, 15, 25, 0.75);" width="1200" />
 
-    <!-- Login Card Container -->
-    <VBox
-            alignment="CENTER"
-            spacing="20"
-            style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;"
-            maxWidth="320"
-    >
-        <effect>
-            <DropShadow radius="15" offsetY="5" color="#00000040"/>
-        </effect>
+    <!-- Login Container -->
+    <VBox alignment="CENTER" spacing="0">
+        <!-- Login Card -->
+        <VBox alignment="CENTER" maxWidth="420" spacing="25" style="-fx-background-color: rgba(15, 52, 96, 0.95); -fx-background-radius: 12; -fx-padding: 40;">
+            <effect>
+                <DropShadow color="#00000099" offsetY="10" radius="25" />
+            </effect>
 
-        <!-- Title Section -->
-        <VBox alignment="CENTER" spacing="5">
-            <Label text="🏢">
-                <font>
-                    <Font size="40" />
-                </font>
-            </Label>
+            <!-- Logo & Title Section -->
+            <VBox alignment="CENTER" spacing="8">
+                <!-- Icon -->
+                <Label style="-fx-font-size: 48;" />
 
-            <Label text="Inventory Management">
-                <font>
-                    <Font name="System Bold" size="20" />
-                </font>
-                <style>
-                    -fx-text-fill: #667eea;
-                </style>
-            </Label>
+                <!-- Title -->
+                <Label style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #3498db;" text="Inventory Management" />
 
-            <Label text="Please login to continue">
-                <font>
-                    <Font size="12" />
-                </font>
-                <style>
-                    -fx-text-fill: #888888;
-                </style>
-            </Label>
-        </VBox>
-
-        <Separator prefWidth="200" />
-
-        <!-- Input Fields Section -->
-        <VBox spacing="15" alignment="CENTER">
-            <!-- Username Field -->
-            <VBox spacing="5" alignment="CENTER_LEFT">
-                <Label text="Username">
-                    <font>
-                        <Font name="System Bold" size="12" />
-                    </font>
-                    <style>
-                        -fx-text-fill: #333333;
-                    </style>
-                </Label>
-                <TextField
-                        fx:id="usernameField"
-                        promptText="Enter your username"
-                        prefWidth="260"
-                        style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #dddddd; -fx-border-width: 1; -fx-padding: 10;"
-                >
-                    <font>
-                        <Font size="13" />
-                    </font>
-                </TextField>
+                <!-- Subtitle -->
+                <Label style="-fx-font-size: 13; -fx-text-fill: #95a5a6; -fx-font-weight: 500;" text="Professional Business Solution" />
             </VBox>
 
-            <!-- Password Field -->
-            <VBox spacing="5" alignment="CENTER_LEFT">
-                <Label text="Password">
-                    <font>
-                        <Font name="System Bold" size="12" />
-                    </font>
-                    <style>
-                        -fx-text-fill: #333333;
-                    </style>
-                </Label>
-                <PasswordField
-                        fx:id="passwordField"
-                        promptText="Enter your password"
-                        prefWidth="260"
-                        style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #dddddd; -fx-border-width: 1; -fx-padding: 10;"
-                        onAction="#handleLogin"
-                >
-                    <font>
-                        <Font size="13" />
-                    </font>
-                </PasswordField>
+            <!-- Separator -->
+            <Separator prefWidth="340" style="-fx-background-color: #2c3e50;" />
+
+            <!-- Login Form -->
+            <VBox alignment="CENTER" spacing="20">
+                <!-- Username Field -->
+                <VBox alignment="CENTER_LEFT" spacing="8">
+                    <Label style="-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #95a5a6; -fx-letter-spacing: 1;" text="USERNAME" />
+                    <TextField fx:id="usernameField" prefWidth="340" promptText="Enter your username" style="-fx-background-color: #1a252f; -fx-text-fill: #ecf0f1; -fx-prompt-text-fill: #7f8c8d; -fx-background-radius: 6; -fx-border-color: #34495e; -fx-border-width: 1; -fx-border-radius: 6; -fx-padding: 12; -fx-font-size: 14;" />
+                </VBox>
+
+                <!-- Password Field -->
+                <VBox alignment="CENTER_LEFT" spacing="8">
+                    <Label style="-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #95a5a6; -fx-letter-spacing: 1;" text="PASSWORD" />
+                    <PasswordField fx:id="passwordField" onAction="#handleLogin" prefWidth="340" promptText="Enter your password" style="-fx-background-color: #1a252f; -fx-text-fill: #ecf0f1; -fx-prompt-text-fill: #7f8c8d; -fx-background-radius: 6; -fx-border-color: #34495e; -fx-border-width: 1; -fx-border-radius: 6; -fx-padding: 12; -fx-font-size: 14;" />
+                </VBox>
+            </VBox>
+
+            <!-- Login Button -->
+            <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="48" prefWidth="340" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand; -fx-font-size: 14; -fx-font-weight: bold; -fx-letter-spacing: 1;" text="LOGIN">
+                <effect>
+                    <DropShadow color="#00000066" offsetY="3" radius="8" />
+                </effect>
+            </Button>
+
+            <!-- Status Label -->
+            <Label fx:id="statusLabel" maxWidth="340" style="-fx-font-size: 12; -fx-font-weight: 600;" text="" textAlignment="CENTER" wrapText="true" />
+
+            <!-- Register Link -->
+            <HBox alignment="CENTER" spacing="8" style="-fx-padding: 10 0 0 0;">
+                <Label style="-fx-font-size: 13; -fx-text-fill: #95a5a6;" text="Don't have an account?" />
+                <Hyperlink fx:id="registerLink" onAction="#handleRegister" style="-fx-text-fill: #3498db; -fx-font-size: 13; -fx-font-weight: bold; -fx-underline: false;" text="Register Here" />
+            </HBox>
+
+            <!-- Divider -->
+            <Separator prefWidth="340" style="-fx-background-color: #2c3e50;" />
+
+            <!-- Info Section -->
+            <VBox alignment="CENTER" spacing="8">
+                <Label style="-fx-font-size: 11; -fx-text-fill: #7f8c8d;" text="System Version 1.0" />
+                <Label style="-fx-font-size: 10; -fx-text-fill: #7f8c8d;" text="© 2026 Inventory Management Solutions" />
             </VBox>
         </VBox>
-
-        <!-- Login Button -->
-        <Button
-                fx:id="loginButton"
-                text="Login"
-                onAction="#handleLogin"
-                prefWidth="260"
-                prefHeight="40"
-                style="-fx-background-color: #667eea; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;"
-        >
-            <font>
-                <Font name="System Bold" size="14" />
-            </font>
-        </Button>
-
-        <!-- Status Label -->
-        <Label
-                fx:id="statusLabel"
-                textFill="#e74c3c"
-                wrapText="true"
-                textAlignment="CENTER"
-                maxWidth="260"
-        >
-            <font>
-                <Font size="12" />
-            </font>
-        </Label>
-
-        <!-- Register Link -->
-        <HBox alignment="CENTER" spacing="5">
-            <Label text="Don't have an account?">
-                <font>
-                    <Font size="12" />
-                </font>
-                <style>
-                    -fx-text-fill: #666666;
-                </style>
-            </Label>
-            <Hyperlink
-                    fx:id="registerLink"
-                    text="Register here"
-                    onAction="#handleRegister"
-                    style="-fx-text-fill: #667eea;"
-            >
-                <font>
-                    <Font name="System Bold" size="12" />
-                </font>
-            </Hyperlink>
-        </HBox>
-
     </VBox>
-
-    <!-- Bottom Info -->
-    <Label text="Inventory Management System v1.0" textAlignment="CENTER">
-        <font>
-            <Font size="10" />
-        </font>
-        <style>
-            -fx-text-fill: rgba(255, 255, 255, 0.7);
-        </style>
-    </Label>
-</VBox>
-
-        <!--
-        ============================================
-        IMPROVEMENTS MADE:
-        ============================================
-
-        1. VISUAL DESIGN:
-           ✅ Added gradient purple background
-           ✅ White card with rounded corners and shadow
-           ✅ Professional, modern look
-           ✅ Better spacing and alignment
-
-        2. USER EXPERIENCE:
-           ✅ Added labels for input fields
-           ✅ Better prompt text
-           ✅ Enter key on password field triggers login
-           ✅ Visual feedback with styled button
-           ✅ Default credentials shown for testing
-
-        3. STYLING:
-           ✅ Custom colors and rounded corners
-           ✅ Proper padding and spacing
-           ✅ Shadow effects for depth
-           ✅ Icon emoji for branding
-           ✅ Hover-ready button (cursor: hand)
-
-        4. ACCESSIBILITY:
-           ✅ Larger click areas
-           ✅ Clear visual hierarchy
-           ✅ Readable font sizes
-           ✅ Proper contrast ratios
-
-        5. FUNCTIONALITY:
-           ✅ Password field has onAction="#handleLogin" for Enter key
-           ✅ Status label for error messages
-           ✅ Better field widths and heights
-
-        ============================================
-        CSS STYLING EXPLANATION:
-        ============================================
-
-        Background gradient: Purple gradient for modern look
-        Card style: White rounded box with shadow
-        Input fields: Rounded borders, proper padding
-        Button: Purple with white text, rounded corners
-        Status label: Red text for errors
-
-        ============================================
-        OPTIONAL: External CSS File
-        ============================================
-
-        For even better styling, create login.css:
-
-        .login-button {
-            -fx-background-color: #667eea;
-            -fx-text-fill: white;
-            -fx-background-radius: 8;
-            -fx-cursor: hand;
-        }
-
-        .login-button:hover {
-            -fx-background-color: #5568d3;
-        }
-
-        .login-button:pressed {
-            -fx-background-color: #4556b8;
-        }
-
-        .text-field, .password-field {
-            -fx-background-radius: 8;
-            -fx-border-radius: 8;
-            -fx-border-color: #dddddd;
-            -fx-border-width: 1;
-            -fx-padding: 10;
-        }
-
-        .text-field:focused, .password-field:focused {
-            -fx-border-color: #667eea;
-            -fx-border-width: 2;
-        }
-
-        Then load it in your controller or FXML.
-
-        ============================================
-        -->
+</StackPane>

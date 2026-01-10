@@ -1,56 +1,63 @@
-/*
- * Inventory Management System - Main Stylesheet
- * Provides consistent styling across all views
- */
-
 /* ============================================
-   ROOT VARIABLES (for easy theming)
+   PROFESSIONAL DARK THEME - INVENTORY SYSTEM
    ============================================ */
+
 .root {
-    -fx-primary-color: #667eea;
-    -fx-primary-dark: #5568d3;
-    -fx-primary-light: #764ba2;
+    /* Dark Theme Colors */
+    -fx-primary-color: #2c3e50;
+    -fx-primary-dark: #1a252f;
+    -fx-primary-light: #34495e;
+    -fx-accent-color: #3498db;
+    -fx-accent-hover: #2980b9;
     -fx-success-color: #27ae60;
     -fx-warning-color: #f39c12;
     -fx-danger-color: #e74c3c;
-    -fx-info-color: #3498db;
-    -fx-text-primary: #333333;
-    -fx-text-secondary: #666666;
-    -fx-text-muted: #888888;
-    -fx-bg-primary: #f5f5f5;
-    -fx-bg-card: white;
-    -fx-border-color: #dddddd;
+    -fx-info-color: #16a085;
+
+    /* Text Colors */
+    -fx-text-primary: #ecf0f1;
+    -fx-text-secondary: #bdc3c7;
+    -fx-text-muted: #95a5a6;
+    -fx-text-dark: #2c3e50;
+
+    /* Background Colors */
+    -fx-bg-primary: #1a1a2e;
+    -fx-bg-secondary: #16213e;
+    -fx-bg-card: #0f3460;
+    -fx-bg-overlay: rgba(15, 52, 96, 0.95);
+
+    /* Border Colors */
+    -fx-border-color: #2c3e50;
+    -fx-border-light: #34495e;
 }
 
 /* ============================================
-   COMMON COMPONENTS
+   BUTTONS - PROFESSIONAL STYLE
    ============================================ */
 
-/* Buttons - Base */
 .button {
-    -fx-background-radius: 8;
+    -fx-background-radius: 4;
     -fx-padding: 10 20;
     -fx-cursor: hand;
-    -fx-font-weight: bold;
+    -fx-font-weight: 600;
+    -fx-font-size: 13px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 4, 0, 0, 2);
 }
 
 /* Primary Button */
 .btn-primary {
-    -fx-background-color: -fx-primary-color;
+    -fx-background-color: -fx-accent-color;
     -fx-text-fill: white;
 }
 
 .btn-primary:hover {
-    -fx-background-color: -fx-primary-dark;
+    -fx-background-color: -fx-accent-hover;
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.5), 8, 0, 0, 2);
 }
 
 .btn-primary:pressed {
-    -fx-background-color: #4556b8;
-}
-
-.btn-primary:disabled {
-    -fx-background-color: #cccccc;
-    -fx-text-fill: #888888;
+    -fx-background-color: #1f6391;
+    -fx-translate-y: 1;
 }
 
 /* Success Button */
@@ -60,7 +67,7 @@
 }
 
 .btn-success:hover {
-    -fx-background-color: #219a52;
+    -fx-background-color: #229954;
 }
 
 /* Warning Button */
@@ -70,7 +77,7 @@
 }
 
 .btn-warning:hover {
-    -fx-background-color: #e08e0b;
+    -fx-background-color: #d68910;
 }
 
 /* Danger Button */
@@ -83,101 +90,122 @@
     -fx-background-color: #c0392b;
 }
 
-/* Info Button */
-.btn-info {
-    -fx-background-color: -fx-info-color;
-    -fx-text-fill: white;
-}
-
-.btn-info:hover {
-    -fx-background-color: #2980b9;
-}
-
 /* Secondary Button */
 .btn-secondary {
-    -fx-background-color: #95a5a6;
+    -fx-background-color: #34495e;
     -fx-text-fill: white;
 }
 
 .btn-secondary:hover {
-    -fx-background-color: #7f8c8d;
+    -fx-background-color: #2c3e50;
 }
 
 /* ============================================
-   TEXT FIELDS & INPUTS
+   TEXT FIELDS & INPUTS - DARK THEME
    ============================================ */
 
 .text-field, .password-field, .text-area {
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-    -fx-border-color: -fx-border-color;
+    -fx-background-color: #1a252f;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-border-color: #34495e;
     -fx-border-width: 1;
     -fx-padding: 10;
     -fx-font-size: 13px;
+    -fx-text-fill: #ecf0f1;
+    -fx-prompt-text-fill: #7f8c8d;
 }
 
 .text-field:focused, .password-field:focused, .text-area:focused {
-    -fx-border-color: -fx-primary-color;
+    -fx-border-color: -fx-accent-color;
     -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.3), 5, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.4), 6, 0, 0, 0);
 }
 
 .text-field:disabled, .password-field:disabled {
-    -fx-background-color: #f0f0f0;
-    -fx-text-fill: #888888;
-}
-
-/* Search Field */
-.search-field {
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-padding: 8 15 8 35;
+    -fx-background-color: #16202b;
+    -fx-text-fill: #7f8c8d;
+    -fx-opacity: 0.6;
 }
 
 /* ============================================
-   COMBO BOX
+   COMBO BOX - DARK THEME
    ============================================ */
 
 .combo-box {
-    -fx-background-radius: 5;
-    -fx-border-radius: 5;
-    -fx-border-color: -fx-border-color;
+    -fx-background-color: #1a252f;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-border-color: #34495e;
 }
 
 .combo-box:focused {
-    -fx-border-color: -fx-primary-color;
+    -fx-border-color: -fx-accent-color;
 }
 
 .combo-box .list-cell {
+    -fx-background-color: #1a252f;
+    -fx-text-fill: #ecf0f1;
     -fx-padding: 8;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #2c3e50;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #1a252f;
+    -fx-border-color: #34495e;
 }
 
 /* ============================================
-   TABLE VIEW
+   TABLE VIEW - PROFESSIONAL DARK
    ============================================ */
 
 .table-view {
-    -fx-background-color: white;
-    -fx-background-radius: 5;
-    -fx-border-radius: 5;
+    -fx-background-color: #0f3460;
+    -fx-background-radius: 4;
 }
 
 .table-view .column-header {
-    -fx-background-color: #f8f9fa;
-    -fx-padding: 10;
+    -fx-background-color: #16213e;
+    -fx-padding: 12;
     -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-text-fill: #ecf0f1;
+    -fx-border-color: #2c3e50;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #16213e;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: #bdc3c7;
+    -fx-padding: 10;
+    -fx-border-color: transparent #2c3e50 transparent transparent;
 }
 
 .table-view .table-row-cell {
-    -fx-padding: 8;
+    -fx-background-color: #0f3460;
+    -fx-border-color: transparent transparent #1a252f transparent;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #0d2f52;
 }
 
 .table-view .table-row-cell:selected {
-    -fx-background-color: rgba(102, 126, 234, 0.2);
+    -fx-background-color: #1a4d7a;
+    -fx-text-fill: white;
+}
+
+.table-view .table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
 }
 
 .table-view .table-row-cell:hover {
-    -fx-background-color: #f8f9fa;
+    -fx-background-color: #143d5f;
 }
 
 /* Low Stock Indicator */
@@ -187,98 +215,114 @@
 }
 
 /* ============================================
-   CARDS & PANELS
+   CARDS & PANELS - DARK GLASS EFFECT
    ============================================ */
 
 .card {
-    -fx-background-color: white;
-    -fx-background-radius: 10;
+    -fx-background-color: rgba(15, 52, 96, 0.9);
+    -fx-background-radius: 8;
     -fx-padding: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 12, 0, 0, 4);
+    -fx-border-color: rgba(52, 152, 219, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
 }
 
 .card-stat {
-    -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-padding: 30;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-background-color: linear-gradient(to bottom, rgba(15, 52, 96, 0.95), rgba(22, 33, 62, 0.95));
+    -fx-background-radius: 8;
+    -fx-padding: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 15, 0, 0, 5);
     -fx-alignment: center;
+    -fx-border-color: rgba(52, 152, 219, 0.4);
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
 }
 
 .stat-value {
-    -fx-font-size: 36;
+    -fx-font-size: 32;
     -fx-font-weight: bold;
 }
 
 .stat-value-primary {
-    -fx-text-fill: -fx-primary-color;
+    -fx-text-fill: #3498db;
 }
 
 .stat-value-success {
-    -fx-text-fill: -fx-success-color;
+    -fx-text-fill: #27ae60;
 }
 
 .stat-value-warning {
-    -fx-text-fill: -fx-warning-color;
+    -fx-text-fill: #f39c12;
 }
 
 .stat-value-info {
-    -fx-text-fill: -fx-info-color;
+    -fx-text-fill: #16a085;
 }
 
 .stat-value-danger {
-    -fx-text-fill: -fx-danger-color;
+    -fx-text-fill: #e74c3c;
 }
 
 .stat-label {
-    -fx-font-size: 14;
-    -fx-text-fill: -fx-text-secondary;
+    -fx-font-size: 13;
+    -fx-text-fill: #bdc3c7;
+    -fx-font-weight: 500;
 }
 
 /* ============================================
-   NAVIGATION
+   NAVIGATION - MODERN DARK
    ============================================ */
 
 .nav-bar {
-    -fx-background-color: #5568d3;
+    -fx-background-color: #16213e;
+    -fx-border-color: transparent transparent #2c3e50 transparent;
+    -fx-border-width: 2;
 }
 
 .nav-button {
     -fx-background-color: transparent;
-    -fx-text-fill: white;
-    -fx-padding: 12 25;
+    -fx-text-fill: #bdc3c7;
+    -fx-padding: 14 22;
     -fx-cursor: hand;
-    -fx-font-weight: bold;
+    -fx-font-weight: 600;
+    -fx-font-size: 13px;
     -fx-border-width: 0 0 3 0;
     -fx-border-color: transparent;
 }
 
 .nav-button:hover {
-    -fx-background-color: rgba(255,255,255,0.1);
+    -fx-background-color: rgba(52, 152, 219, 0.15);
+    -fx-text-fill: #3498db;
 }
 
 .nav-button.active {
-    -fx-border-color: white;
+    -fx-border-color: #3498db;
+    -fx-text-fill: #3498db;
+    -fx-background-color: rgba(52, 152, 219, 0.1);
 }
 
 /* ============================================
-   HEADER BAR
+   HEADER BAR - PROFESSIONAL DARK
    ============================================ */
 
 .header-bar {
-    -fx-background-color: linear-gradient(to right, -fx-primary-color, -fx-primary-light);
-    -fx-padding: 15 20;
+    -fx-background-color: linear-gradient(to right, #0f3460, #16213e);
+    -fx-padding: 18 25;
+    -fx-border-color: transparent transparent #2c3e50 transparent;
+    -fx-border-width: 2;
 }
 
 .header-title {
     -fx-font-size: 20;
     -fx-font-weight: bold;
-    -fx-text-fill: white;
+    -fx-text-fill: #ecf0f1;
 }
 
 .welcome-label {
     -fx-font-size: 14;
-    -fx-text-fill: white;
+    -fx-text-fill: #bdc3c7;
+    -fx-font-weight: 500;
 }
 
 /* ============================================
@@ -286,180 +330,205 @@
    ============================================ */
 
 .status-bar {
-    -fx-background-color: #34495e;
+    -fx-background-color: #0f1419;
     -fx-padding: 10 20;
+    -fx-border-color: #2c3e50 transparent transparent transparent;
+    -fx-border-width: 1;
 }
 
 .status-text {
-    -fx-text-fill: white;
+    -fx-text-fill: #95a5a6;
     -fx-font-size: 12;
 }
 
 /* ============================================
-   LABELS
+   LABELS - DARK THEME
    ============================================ */
 
 .label-title {
     -fx-font-size: 24;
     -fx-font-weight: bold;
-    -fx-text-fill: -fx-text-primary;
+    -fx-text-fill: #ecf0f1;
 }
 
 .label-subtitle {
     -fx-font-size: 16;
-    -fx-font-weight: bold;
-    -fx-text-fill: -fx-text-primary;
+    -fx-font-weight: 600;
+    -fx-text-fill: #ecf0f1;
 }
 
 .label-muted {
-    -fx-text-fill: -fx-text-muted;
+    -fx-text-fill: #7f8c8d;
     -fx-font-size: 12;
 }
 
 .label-success {
-    -fx-text-fill: -fx-success-color;
+    -fx-text-fill: #27ae60;
     -fx-font-weight: bold;
 }
 
 .label-error {
-    -fx-text-fill: -fx-danger-color;
+    -fx-text-fill: #e74c3c;
     -fx-font-weight: bold;
 }
 
 .label-warning {
-    -fx-text-fill: -fx-warning-color;
+    -fx-text-fill: #f39c12;
     -fx-font-weight: bold;
 }
 
 /* ============================================
-   FORMS
+   FORMS - DARK THEME
    ============================================ */
 
 .form-label {
-    -fx-font-weight: bold;
+    -fx-font-weight: 600;
     -fx-font-size: 12;
-    -fx-text-fill: -fx-text-primary;
+    -fx-text-fill: #bdc3c7;
 }
 
 .form-group {
-    -fx-spacing: 5;
+    -fx-spacing: 8;
 }
 
 /* ============================================
-   TIPS BOX
+   TIPS BOX - DARK
    ============================================ */
 
 .tips-box {
-    -fx-background-color: #ecf0f1;
-    -fx-background-radius: 5;
-    -fx-padding: 10;
+    -fx-background-color: rgba(22, 33, 62, 0.8);
+    -fx-background-radius: 6;
+    -fx-padding: 12;
+    -fx-border-color: rgba(52, 152, 219, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
 }
 
 .tips-title {
     -fx-font-weight: bold;
     -fx-font-size: 12;
+    -fx-text-fill: #3498db;
 }
 
 .tips-item {
     -fx-font-size: 11;
+    -fx-text-fill: #95a5a6;
 }
 
 /* ============================================
-   ALERTS & NOTIFICATIONS
-   ============================================ */
-
-.alert-success {
-    -fx-background-color: #d4edda;
-    -fx-border-color: #c3e6cb;
-    -fx-text-fill: #155724;
-}
-
-.alert-error {
-    -fx-background-color: #f8d7da;
-    -fx-border-color: #f5c6cb;
-    -fx-text-fill: #721c24;
-}
-
-.alert-warning {
-    -fx-background-color: #fff3cd;
-    -fx-border-color: #ffeeba;
-    -fx-text-fill: #856404;
-}
-
-.alert-info {
-    -fx-background-color: #d1ecf1;
-    -fx-border-color: #bee5eb;
-    -fx-text-fill: #0c5460;
-}
-
-/* ============================================
-   LOGIN VIEW
+   LOGIN VIEW - DARK WITH BACKGROUND
    ============================================ */
 
 .login-background {
-    -fx-background-color: linear-gradient(to bottom, -fx-primary-color 0%, -fx-primary-light 100%);
+    -fx-background-image: url('https://images.unsplash.com/photo-1557683316-973673baf926?w=1920');
+    -fx-background-size: cover;
+    -fx-background-position: center;
 }
 
 .login-card {
-    -fx-background-color: white;
-    -fx-background-radius: 15;
-    -fx-padding: 30;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0, 0, 5);
+    -fx-background-color: rgba(15, 52, 96, 0.95);
+    -fx-background-radius: 12;
+    -fx-padding: 35;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 25, 0, 0, 10);
+    -fx-border-color: rgba(52, 152, 219, 0.5);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
 }
 
 .login-title {
-    -fx-font-size: 20;
+    -fx-font-size: 22;
     -fx-font-weight: bold;
-    -fx-text-fill: -fx-primary-color;
+    -fx-text-fill: #3498db;
 }
 
 /* ============================================
-   SCROLLBAR STYLING
+   SCROLLBAR - DARK THEME
    ============================================ */
 
 .scroll-bar:vertical .thumb {
-    -fx-background-color: #cccccc;
-    -fx-background-radius: 5;
+    -fx-background-color: #34495e;
+    -fx-background-radius: 4;
 }
 
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color: #aaaaaa;
+    -fx-background-color: #3498db;
 }
 
 .scroll-bar:vertical .track {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color: #1a252f;
+}
+
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #34495e;
+    -fx-background-radius: 4;
+}
+
+.scroll-bar:horizontal .track {
+    -fx-background-color: #1a252f;
 }
 
 /* ============================================
-   SEPARATOR
+   SEPARATOR - DARK
    ============================================ */
 
 .separator .line {
-    -fx-border-color: #eeeeee;
+    -fx-border-color: #2c3e50;
     -fx-border-width: 1 0 0 0;
 }
 
 /* ============================================
-   CHECK BOX
+   CHECK BOX - DARK THEME
    ============================================ */
 
 .check-box {
-    -fx-font-weight: normal;
+    -fx-text-fill: #bdc3c7;
+}
+
+.check-box .box {
+    -fx-background-color: #1a252f;
+    -fx-border-color: #34495e;
+    -fx-border-radius: 3;
 }
 
 .check-box:selected .box {
-    -fx-background-color: -fx-primary-color;
-    -fx-border-color: -fx-primary-color;
+    -fx-background-color: -fx-accent-color;
+    -fx-border-color: -fx-accent-color;
+}
+
+.check-box .mark {
+    -fx-background-color: white;
+}
+
+/* ============================================
+   HYPERLINK - DARK THEME
+   ============================================ */
+
+.hyperlink {
+    -fx-text-fill: #3498db;
+}
+
+.hyperlink:hover {
+    -fx-text-fill: #5dade2;
+    -fx-underline: true;
 }
 
 /* ============================================
    PROGRESS INDICATOR
    ============================================ */
 
-.progress-indicator {
-    -fx-padding: 20;
+.progress-indicator .arc {
+    -fx-stroke: #3498db;
 }
 
-.progress-indicator .arc {
-    -fx-stroke: -fx-primary-color;
+/* ============================================
+   SPLIT PANE - DARK
+   ============================================ */
+
+.split-pane {
+    -fx-background-color: transparent;
+}
+
+.split-pane-divider {
+    -fx-background-color: #2c3e50;
+    -fx-padding: 0 1 0 1;
 }

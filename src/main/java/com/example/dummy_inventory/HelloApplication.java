@@ -13,27 +13,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Main Application Entry Point - IMPROVED VERSION
- * Handles proper lifecycle management, error handling, and resource cleanup
- *
- * IMPROVEMENTS:
- * - init() method for pre-flight checks (database connection test)
- * - Proper exception handling with user-friendly alerts
- * - CSS stylesheet loading
- * - Application icon support
- * - Clean shutdown handling
- * - Confirmation dialog on exit
- * - Uncaught exception handler
- */
+
 public class HelloApplication extends Application {
 
     private static Stage primaryStage;
 
-    /**
-     * Initialize method - runs before start()
-     * Use for pre-flight checks and resource initialization
-     */
+
     @Override
     public void init() throws Exception {
         super.init();
@@ -44,8 +29,7 @@ public class HelloApplication extends Application {
         if (!DatabaseConnection.testConnection()) {
             throw new RuntimeException(
                     "Unable to connect to database. " +
-                    "Please check your database.properties configuration and ensure MySQL is running."
-            );
+                            "Please check your database.properties configuration and ensure MySQL is running.");
         }
 
         System.out.println("✓ Database connection verified");
@@ -189,7 +173,7 @@ public class HelloApplication extends Application {
      * Navigate to a different scene (helper method for controllers)
      *
      * @param fxmlPath Path to FXML file
-     * @param title Window title
+     * @param title    Window title
      */
     public static void navigateTo(String fxmlPath, String title) {
         try {
@@ -200,8 +184,7 @@ public class HelloApplication extends Application {
             String cssPath = "/css/styles.css";
             if (HelloApplication.class.getResource(cssPath) != null) {
                 scene.getStylesheets().add(
-                        HelloApplication.class.getResource(cssPath).toExternalForm()
-                );
+                        HelloApplication.class.getResource(cssPath).toExternalForm());
             }
 
             primaryStage.setScene(scene);

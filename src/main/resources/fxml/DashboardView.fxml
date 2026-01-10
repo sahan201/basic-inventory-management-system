@@ -1,224 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.*?>
 
-<BorderPane
-        fx:controller="com.example.dummy_inventory.controller.DashboardController"
-        xmlns:fx="http://javafx.com/fxml/1"
-        xmlns="http://javafx.com/javafx/17"
-        prefWidth="1200"
-        prefHeight="700"
-        style="-fx-background-color: #f5f5f5;"
->
-
-    <!-- TOP: Header Bar -->
-    <top>
-        <VBox style="-fx-background-color: #667eea;">
-            <!-- Title Bar -->
-            <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 15 20; -fx-background-color: #667eea;">
-                <Label text="📦" style="-fx-font-size: 28;"/>
-                <Label text="Inventory Management System" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="20"/>
-                    </font>
-                </Label>
-
-                <!-- Spacer -->
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <!-- User Info -->
-                <HBox alignment="CENTER_RIGHT" spacing="15">
-                    <Label fx:id="welcomeLabel" text="Welcome, User" textFill="WHITE">
-                        <font>
-                            <Font size="14"/>
-                        </font>
-                    </Label>
-                    <Button
-                            fx:id="logoutButton"
-                            text="Logout"
-                            onAction="#handleLogout"
-                            style="-fx-background-color: #764ba2; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand; -fx-padding: 8 20;"
-                    >
-                        <font>
-                            <Font name="System Bold" size="12"/>
-                        </font>
-                    </Button>
-                </HBox>
-            </HBox>
-
-            <!-- Navigation Menu -->
-            <HBox spacing="0" style="-fx-background-color: #5568d3; -fx-padding: 0;">
-                <Button
-                        fx:id="btnDashboard"
-                        text="📊 Dashboard"
-                        onAction="#showDashboard"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: #ffffff;"
-                >
-                    <font><Font name="System Bold" size="13"/></font>
-                </Button>
-                <Button
-                        fx:id="btnProducts"
-                        text="📦 Products"
-                        onAction="#showProducts"
-                        styleClass="nav-button"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;"
-                >
-                    <font><Font name="System Bold" size="13"/></font>
-                </Button>
-                <Button
-                        fx:id="btnCategories"
-                        text="📂 Categories"
-                        onAction="#showCategories"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;"
-                >
-                    <font><Font name="System Bold" size="13"/></font>
-                </Button>
-                <Button
-                        fx:id="btnSuppliers"
-                        text="🚚 Suppliers"
-                        onAction="#showSuppliers"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;"
-                >
-                    <font><Font name="System Bold" size="13"/></font>
-                </Button>
-                <Button
-                        fx:id="btnSales"
-                        text="💰 Sales"
-                        onAction="#showSales"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;"
-                >
-                    <font><Font name="System Bold" size="13"/></font>
-                </Button>
-                <Button
-                        fx:id="btnUsers"
-                        text="👥 Users"
-                        onAction="#showUsers"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;"
-                >
-                    <font><Font name="System Bold" size="13"/></font>
-                </Button>
-                <Button
-                        fx:id="btnReports"
-                        text="📈 Reports"
-                        onAction="#showReports"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;"
-                >
-                    <font><Font name="System Bold" size="13"/></font>
-                </Button>
-            </HBox>
-        </VBox>
-    </top>
-
-    <!-- CENTER: Main Content Area -->
-    <center>
-        <StackPane fx:id="contentArea" style="-fx-background-color: #f5f5f5;">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
-
-            <!-- Default Dashboard View -->
-            <VBox fx:id="dashboardPane" spacing="20" alignment="TOP_CENTER">
-
-                <!-- Statistics Cards -->
-                <HBox spacing="20" alignment="CENTER">
-                    <!-- Total Products Card -->
-                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" prefWidth="250">
-                        <Label text="📦" style="-fx-font-size: 40;"/>
-                        <Label fx:id="totalProductsLabel" text="0" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #667eea;"/>
-                        <Label text="Total Products" style="-fx-font-size: 14; -fx-text-fill: #666666;"/>
-                    </VBox>
-
-                    <!-- Total Categories Card -->
-                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" prefWidth="250">
-                        <Label text="📂" style="-fx-font-size: 40;"/>
-                        <Label fx:id="totalCategoriesLabel" text="0" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
-                        <Label text="Categories" style="-fx-font-size: 14; -fx-text-fill: #666666;"/>
-                    </VBox>
-
-                    <!-- Total Suppliers Card -->
-                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" prefWidth="250">
-                        <Label text="🚚" style="-fx-font-size: 40;"/>
-                        <Label fx:id="totalSuppliersLabel" text="0" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #e67e22;"/>
-                        <Label text="Suppliers" style="-fx-font-size: 14; -fx-text-fill: #666666;"/>
-                    </VBox>
-
-                    <!-- Total Sales Card -->
-                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" prefWidth="250">
-                        <Label text="💰" style="-fx-font-size: 40;"/>
-                        <Label fx:id="totalSalesLabel" text="0" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
-                        <Label text="Total Sales" style="-fx-font-size: 14; -fx-text-fill: #666666;"/>
-                    </VBox>
-                </HBox>
-
-                <!-- Quick Actions -->
-                <VBox spacing="15" alignment="CENTER" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" prefWidth="1000">
-                    <Label text="Quick Actions" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
-
-                    <HBox spacing="15" alignment="CENTER">
-                        <Button
-                                text="➕ Add Product"
-                                onAction="#showProducts"
-                                style="-fx-background-color: #667eea; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 15 30; -fx-cursor: hand;"
-                        >
-                            <font><Font name="System Bold" size="13"/></font>
-                        </Button>
-
-                        <Button
-                                text="📝 Record Sale"
-                                onAction="#showSales"
-                                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 15 30; -fx-cursor: hand;"
-                        >
-                            <font><Font name="System Bold" size="13"/></font>
-                        </Button>
-
-                        <Button
-                                text="👁 View Inventory"
-                                onAction="#showProducts"
-                                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 15 30; -fx-cursor: hand;"
-                        >
-                            <font><Font name="System Bold" size="13"/></font>
-                        </Button>
-
-                        <Button
-                                text="🚚 Manage Suppliers"
-                                onAction="#showSuppliers"
-                                style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 15 30; -fx-cursor: hand;"
-                        >
-                            <font><Font name="System Bold" size="13"/></font>
-                        </Button>
-                    </HBox>
-                </VBox>
-
-                <!-- Low Stock Alert -->
-                <VBox spacing="10" alignment="TOP_LEFT" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" prefWidth="1000">
-                    <Label text="⚠ Low Stock Alert" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #e74c3c;"/>
-                    <Label fx:id="lowStockLabel" text="Loading..." style="-fx-font-size: 13; -fx-text-fill: #666666;" wrapText="true"/>
-                </VBox>
-            </VBox>
-        </StackPane>
-    </center>
-
-    <!-- BOTTOM: Status Bar -->
-    <bottom>
-        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #34495e; -fx-padding: 10 20;">
-            <Label fx:id="statusLabel" text="Ready" textFill="WHITE">
-                <font><Font size="12"/></font>
-            </Label>
-
-            <Region HBox.hgrow="ALWAYS"/>
-
-            <Label text="Inventory Management System v1.0" textFill="#95a5a6">
-                <font><Font size="10"/></font>
-            </Label>
-        </HBox>
-    </bottom>
-
-</BorderPane>
-
-        <!--
+<!--
         ============================================
         DASHBOARD FEATURES:
         ============================================
@@ -267,3 +54,152 @@
 
         ============================================
         -->
+
+<BorderPane prefHeight="700" prefWidth="1200" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dummy_inventory.controller.DashboardController">
+
+    <!-- TOP: Header Bar -->
+    <top>
+        <VBox style="-fx-background-color: #667eea;">
+            <!-- Title Bar -->
+            <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 15 20; -fx-background-color: #061831;">
+                <Label style="-fx-font-size: 28;" />
+                <Label text="Inventory Management System" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="20" />
+                    </font>
+                </Label>
+
+                <!-- Spacer -->
+                <Region HBox.hgrow="ALWAYS" />
+
+                <!-- User Info -->
+                <HBox alignment="CENTER_RIGHT" spacing="15">
+                    <Label fx:id="welcomeLabel" text="Welcome, User" textFill="WHITE">
+                        <font>
+                            <Font size="14" />
+                        </font>
+                    </Label>
+                    <Button fx:id="logoutButton" onAction="#handleLogout" style="-fx-background-color: #764ba2; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand; -fx-padding: 8 20;" text="Logout">
+                        <font>
+                            <Font name="System Bold" size="12" />
+                        </font>
+                    </Button>
+                </HBox>
+            </HBox>
+
+            <!-- Navigation Menu -->
+            <HBox spacing="0" style="-fx-background-color: #292929; -fx-padding: 0;">
+                <Button fx:id="btnDashboard" onAction="#showDashboard" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: #ffffff;" text="Dashboard">
+                    <font><Font name="System Bold" size="13" /></font>
+                </Button>
+                <Button fx:id="btnProducts" onAction="#showProducts" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;" styleClass="nav-button" text="Products">
+                    <font><Font name="System Bold" size="13" /></font>
+                </Button>
+                <Button fx:id="btnCategories" onAction="#showCategories" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;" text="Categories">
+                    <font><Font name="System Bold" size="13" /></font>
+                </Button>
+                <Button fx:id="btnSuppliers" onAction="#showSuppliers" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;" text="Suppliers">
+                    <font><Font name="System Bold" size="13" /></font>
+                </Button>
+                <Button fx:id="btnSales" onAction="#showSales" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;" text="Sales">
+                    <font><Font name="System Bold" size="13" /></font>
+                </Button>
+                <Button fx:id="btnUsers" onAction="#showUsers" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;" text="Users">
+                    <font><Font name="System Bold" size="13" /></font>
+                </Button>
+                <Button fx:id="btnReports" onAction="#showReports" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-padding: 12 25; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;" text="Reports">
+                    <font><Font name="System Bold" size="13" /></font>
+                </Button>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- CENTER: Main Content Area -->
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: #f5f5f5;">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <!-- Default Dashboard View -->
+            <VBox fx:id="dashboardPane" alignment="TOP_CENTER" spacing="20">
+
+                <!-- Statistics Cards -->
+                <HBox alignment="CENTER" spacing="20">
+                    <!-- Total Products Card -->
+                    <VBox alignment="CENTER" prefWidth="250" spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                        <Label style="-fx-font-size: 40;" />
+                        <Label fx:id="totalProductsLabel" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #667eea;" text="0" />
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #666666;" text="Total Products" />
+                    </VBox>
+
+                    <!-- Total Categories Card -->
+                    <VBox alignment="CENTER" prefWidth="250" spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                        <Label style="-fx-font-size: 40;" />
+                        <Label fx:id="totalCategoriesLabel" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #27ae60;" text="0" />
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #666666;" text="Categories" />
+                    </VBox>
+
+                    <!-- Total Suppliers Card -->
+                    <VBox alignment="CENTER" prefWidth="250" spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                        <Label style="-fx-font-size: 40;" />
+                        <Label fx:id="totalSuppliersLabel" prefHeight="54.0" prefWidth="14.0" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #e67e22;" text="0" />
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #666666;" text="Suppliers" />
+                    </VBox>
+
+                    <!-- Total Sales Card -->
+                    <VBox alignment="CENTER" prefWidth="250" spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                        <Label style="-fx-font-size: 40;" />
+                        <Label fx:id="totalSalesLabel" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #3498db;" text="0" />
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #666666;" text="Total Sales" />
+                    </VBox>
+                </HBox>
+
+                <!-- Quick Actions -->
+                <VBox alignment="CENTER" prefWidth="1000" spacing="15" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                    <Label style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Quick Actions" />
+
+                    <HBox alignment="CENTER" spacing="15">
+                        <Button onAction="#showProducts" style="-fx-background-color: #667eea; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 15 30; -fx-cursor: hand;" text="➕ Add Product">
+                            <font><Font name="System Bold" size="13" /></font>
+                        </Button>
+
+                        <Button onAction="#showSales" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 15 30; -fx-cursor: hand;" text="Record Sale">
+                            <font><Font name="System Bold" size="13" /></font>
+                        </Button>
+
+                        <Button onAction="#showProducts" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 15 30; -fx-cursor: hand;" text="View Inventory">
+                            <font><Font name="System Bold" size="13" /></font>
+                        </Button>
+
+                        <Button onAction="#showSuppliers" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 15 30; -fx-cursor: hand;" text="Manage Suppliers">
+                            <font><Font name="System Bold" size="13" /></font>
+                        </Button>
+                    </HBox>
+                </VBox>
+
+                <!-- Low Stock Alert -->
+                <VBox alignment="TOP_LEFT" prefWidth="1000" spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                    <Label style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" text="Low Stock Alert" />
+                    <Label fx:id="lowStockLabel" style="-fx-font-size: 13; -fx-text-fill: #666666;" text="Loading..." wrapText="true" />
+                </VBox>
+            </VBox>
+        </StackPane>
+    </center>
+
+    <!-- BOTTOM: Status Bar -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #34495e; -fx-padding: 10 20;">
+            <Label fx:id="statusLabel" text="Ready" textFill="WHITE">
+                <font><Font size="12" /></font>
+            </Label>
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <Label text="Inventory Management System v1.0" textFill="#95a5a6">
+                <font><Font size="10" /></font>
+            </Label>
+        </HBox>
+    </bottom>
+
+</BorderPane>
